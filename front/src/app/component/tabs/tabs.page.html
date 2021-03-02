@@ -1,0 +1,20 @@
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="sujet">
+      <ion-icon name="clipboard"></ion-icon>
+      <ion-label>Sujet</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="role=='Expert'"  tab="disponibilite">
+      <ion-icon name="calendar"></ion-icon>
+      <ion-label>Disponibilité</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="seance">
+      <ion-icon name="videocam"></ion-icon>
+      <ion-label>Séance</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>

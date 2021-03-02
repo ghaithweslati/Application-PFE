@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{sujet.titre}}</ion-title>
+    <ion-buttons slot="start" >
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons *ngIf="role=='Expert'" slot="end"  (click)="presentAlertConfirm()">
+      <ion-icon name="trash" ></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      Informations
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h3>Titre</h3>
+        <p>{{sujet.titre}}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>Description</h3>
+        <p>{{sujet.description}}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>Expert</h3>
+        <p>{{sujet.expert.nom}} {{sujet.expert.prenom}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      Frais
+    </ion-list-header>
+
+    <div *ngFor="let fr of sujet.frais">
+    <ion-item>
+      <ion-label>
+        <h3>{{fr.duree}} min</h3>
+        <p>{{fr.prix}} DT</p>
+      </ion-label>
+    </ion-item>
+    </div>
+  </ion-list>
+
+
+</ion-content>
+<ion-footer class="bottom" *ngIf="role=='Demandeur'"> 
+  <ion-toolbar>
+    <ion-button (click)="plannifierSeance()" expand="block">Plannifier une séance</ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  lookbook-api:
+    build: .
+    environment:
+      DB_HOSTNAME: db
+    depends_on:
+      - db
+    links:
+      - db:db
+    ports:
+      - 8080:8080
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "lookbookdatabase"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"

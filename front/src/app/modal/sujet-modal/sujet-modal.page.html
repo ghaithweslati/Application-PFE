@@ -1,0 +1,50 @@
+<ion-toolbar color="primary">
+  <ion-buttons slot="start">
+    <ion-button (click)="close()">
+      <ion-icon name="close" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-title></ion-title>
+  <ion-buttons slot="end">
+    <ion-button (click)="save()">
+      <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+ 
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked">Titre</ion-label>
+    <ion-input type="text" [(ngModel)]="sujet.titre"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Description</ion-label>
+    <ion-input type="text" [(ngModel)]="sujet.description"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Prix</ion-label>
+ 
+    <ion-item>
+      <ion-checkbox color="primary"  (ionChange)="checkFrais($event,frais15)" ></ion-checkbox>
+      <ion-label>15 min :</ion-label>
+      <ion-input name="_15min" type="number"[(ngModel)]="frais15.prix"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox color="primary" (ionChange)="checkFrais($event,frais30)"></ion-checkbox>
+      <ion-label>30 min :</ion-label>
+      <ion-input name="_30min" type="number"  [(ngModel)]="frais30.prix"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox color="primary" (ionChange)="checkFrais($event,frais45)"></ion-checkbox>
+      <ion-label>45 min : </ion-label>
+      <ion-input name="_45min" type="number"  [(ngModel)]="frais45.prix"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox color="primary" (ionChange)="checkFrais($event,frais60)"></ion-checkbox>
+      <ion-label>60 min :</ion-label>
+      <ion-input name="_60min" type="number"  [(ngModel)]="frais60.prix"></ion-input>
+    </ion-item>
+  </ion-item>
+ 
+
+</ion-content>
