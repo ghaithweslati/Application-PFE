@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { SujetModalPage } from 'src/app/modal/sujet-modal/sujet-modal.page';
+import { Expert } from 'src/app/model/expert';
 import { Sujet } from 'src/app/model/sujet';
+import { ExpertService } from 'src/app/service/expert.service';
 import { StorageService } from 'src/app/service/storage.service';
 import { SujetService } from '../../service/sujet.service';
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -17,14 +21,20 @@ export class SujetPage implements OnInit {
 
   sujets:Sujet[]=[];
   allSujets:Sujet[]=[];
+  experts:Expert[]=[];
   searchVal="";
   sujet:Sujet=new Sujet();
   role="";
+  titre="Sujets";
+  segment="sujet";
+  
   constructor( private sujService:SujetService,
     private storageService:StorageService,
+    private expertService:ExpertService,
     private modalCtrl:ModalController,
+    private route:ActivatedRoute,
+    private _sanitizer: DomSanitizer,
     private router: Router) {
-    
   }
 
   
@@ -40,30 +50,60 @@ export class SujetPage implements OnInit {
   
     
     modal.onDidDismiss().then((result) => {
-      this.afficher();
+      this.afficherLesSujets();
     });
   }   
 
   ngOnInit() {
-   this.role=this.storageService.afficherUtilisateurCourant().role;
+    this.route.params.subscribe(
+      params => {
+        this.role=this.storageService.afficherUtilisateurCourant().role;
+        this.afficherLesSujets();
+      });
+    this.afficherLesExperts();    
 
-    this.afficher();
   }
 
-  afficher()
+  afficherLesExperts()
   {
-    if(this.storageService.afficherUtilisateurCourant().role=="Demandeur")
+    const role = this.storageService.afficherUtilisateurCourant().role;
+    
+    if(role=="Demandeur")
     {
-      this.sujService.afficherTousSujets().subscribe(res=>
-        {
-          this.sujets=res.data.rows;
-          this.allSujets=this.sujets;
-        });
+
+          this.expertService.afficherExperts().subscribe(res=>
+            {
+              this.experts=res.data.rows;
+            });
+        }
+    }
+
+
+  afficherLesSujets()
+  {
+    const role = this.storageService.afficherUtilisateurCourant().role;
+    
+    if(role=="Demandeur")
+    {
+      this.route.queryParams.subscribe(params => {
+        if (params) {
+
+          const idDomaine=params.idDomaine;
+          this.titre=params.nomDomaine;
+          
+          this.sujService.afficherTousSujets(role,idDomaine).subscribe(res=>
+            {
+              this.sujets=res.data.rows;
+              this.allSujets=this.sujets;
+            });
+        }
+      });
+
     }
     else
     {
       const id = this.storageService.afficherUtilisateurCourant().id;
-      this.sujService.afficherMesSujets(id).subscribe(res=>
+      this.sujService.afficherTousSujets(role,id).subscribe(res=>
         {
           this.sujets=res.data.rows;
           this.allSujets=this.sujets;
@@ -100,4 +140,18 @@ export class SujetPage implements OnInit {
     this.sujets=this.allSujets;
   }
 
+  segmentChanged(ev: any) {
+    this.segment = ev.target.value;
+  }
+
+  base64image(photo)
+  {
+    if(photo)
+      return this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
+      + photo);
+    else
+      return "assets/icon/user.png";
+      
+
+  }
 }

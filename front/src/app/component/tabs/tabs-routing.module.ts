@@ -8,6 +8,10 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: 'domaine',
+        loadChildren: () => import('../domaine/domaine.module').then(m => m.DomainePageModule)
+      },
+      {
         path: 'sujet',
         loadChildren: () => import('../sujet/sujet.module').then(m => m.SujetPageModule)
       },

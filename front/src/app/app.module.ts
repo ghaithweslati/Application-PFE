@@ -11,6 +11,10 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 
 import { IonicStorageModule } from '@ionic/storage';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+
+
 
 
 
@@ -19,7 +23,7 @@ import { IonicStorageModule } from '@ionic/storage';
   entryComponents: [],
   imports: [FormsModule,CommonModule,BrowserModule,HttpClientModule,BrowserModule,
     IonicModule.forRoot(),    IonicStorageModule.forRoot(),AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },AndroidPermissions,InAppBrowser],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

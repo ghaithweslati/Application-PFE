@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class FraisService {
 
-  public baseUrl = 'http://localhost:8080/frais';
+  public baseUrl = 'https://ghaith-weslati.herokuapp.com/frais';
 //  private token="";
 
   constructor(private http: HttpClient) { 

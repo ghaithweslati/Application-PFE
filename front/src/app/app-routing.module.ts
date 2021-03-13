@@ -28,7 +28,19 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./component/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'room',
+    loadChildren: () => import('./component/room/room.module').then( m => m.RoomPageModule)
+  },
+  {
+    path: 'inscription',
+    loadChildren: () => import('./component/inscription/inscription.module').then( m => m.InscriptionPageModule)
+  },
+  {
+    path: 'domaine',
+    loadChildren: () => import('./component/domaine/domaine.module').then( m => m.DomainePageModule)
   }
 ];
 @NgModule({

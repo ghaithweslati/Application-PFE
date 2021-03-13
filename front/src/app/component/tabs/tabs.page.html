@@ -1,7 +1,13 @@
 <ion-tabs>
 
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="sujet">
+
+    <ion-tab-button *ngIf="role=='Demandeur'" tab="domaine">
+      <ion-icon name="apps"></ion-icon>
+      <ion-label>Domaine</ion-label>
+    </ion-tab-button>
+    
+    <ion-tab-button *ngIf="role=='Expert'" tab="sujet">
       <ion-icon name="clipboard"></ion-icon>
       <ion-label>Sujet</ion-label>
     </ion-tab-button>

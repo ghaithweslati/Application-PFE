@@ -8,5 +8,5 @@ export class Utilisateur {
       password:string;
       hash: string;
       salt: string;
-      image: string;
+      photo: Text;
 }

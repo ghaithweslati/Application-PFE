@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SujetService {
 
-  public baseUrl = 'http://localhost:8080/sujet';
+  public baseUrl = 'https://ghaith-weslati.herokuapp.com/sujet';
 
   constructor(private http: HttpClient) { 
   }
@@ -28,7 +28,7 @@ export class SujetService {
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('token'),
     });
-    return this.http.get(`${this.baseUrl}/detail/${id}`, { headers: reqHeader });
+    return this.http.get(`${this.baseUrl}/${id}`, { headers: reqHeader });
   }
 
   supprimerSujet(id: number): Observable<any> {
@@ -39,19 +39,13 @@ export class SujetService {
     return this.http.delete(`${this.baseUrl}/${id}`, { headers: reqHeader });
   }
 
-  afficherMesSujets(id): Observable<any> {
-    var reqHeader = new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('token'),
-    });
-    return this.http.get(`${this.baseUrl}/${id}`,{ headers: reqHeader });
-  }
 
-  afficherTousSujets(): Observable<any> {
+
+  afficherTousSujets(role,id): Observable<any> {
     var reqHeader = new HttpHeaders({ 
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('token'),
     });
-    return this.http.get(`${this.baseUrl}`,{ headers: reqHeader });
+    return this.http.get(`${this.baseUrl}/${role}/${id}`,{ headers: reqHeader });
   }
 }

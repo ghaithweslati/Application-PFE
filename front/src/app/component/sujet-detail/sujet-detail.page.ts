@@ -4,6 +4,8 @@ import { AlertController } from '@ionic/angular';
 import { Sujet } from 'src/app/model/sujet';
 import { StorageService } from 'src/app/service/storage.service';
 import { SujetService } from 'src/app/service/sujet.service';
+import { NgZone } from '@angular/core';
+
 
 
 @Component({
@@ -20,6 +22,7 @@ export class SujetDetailPage implements OnInit {
     private sujetService:SujetService,
     private alertCtrl:AlertController,
     private storageService:StorageService,
+    private ngZone: NgZone,
     private router:Router) { }
 
   ngOnInit() {
@@ -55,8 +58,8 @@ export class SujetDetailPage implements OnInit {
           handler: () => {
             this.sujetService.supprimerSujet(this.sujet.id).subscribe(res=>
               {
-                window.location.href = "../tabs/sujet";
-
+                this.ngZone.run(() =>
+                this.router.navigate(['./tabs/sujet']));
               })
           }
         }

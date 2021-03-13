@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SeanceService {
 
-  public baseUrl = 'http://localhost:8080/seance';
+  public baseUrl = 'https://ghaith-weslati.herokuapp.com/seance';
 
 
   constructor(private http: HttpClient) { 

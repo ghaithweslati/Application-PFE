@@ -7,6 +7,10 @@ import { SeanceService } from 'src/app/service/seance.service';
 import { Seance } from 'src/app/model/seance';
 import { PopoverPage } from 'src/app/modal/popover/popover.page';
 import { StorageService } from 'src/app/service/storage.service';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
+
+
 
 @Component({
   selector: 'app-seance',
@@ -22,6 +26,16 @@ export class SeancePage {
     mode: 'month',
     currentDate: new Date(),
   };
+
+  
+  options : InAppBrowserOptions = {
+    location : 'yes',//Or 'no' 
+    hidden : 'no', //Or  'yes'
+    zoom : 'yes',//Android only ,shows browser zoom controls 
+    hideurlbar:'yes',//Or 'no'
+
+};
+
  
   selectedDate: Date;
   id;
@@ -34,12 +48,18 @@ export class SeancePage {
     private modalCtrl: ModalController,
     private seanceService:SeanceService,
     private storageService:StorageService,
-    private popCtrl:PopoverController
+    private popCtrl:PopoverController,
+    private route:ActivatedRoute,
+    private router:Router,
+    private iab: InAppBrowser
   ) {}
  
   ngOnInit() {
-    this.role=this.storageService.afficherUtilisateurCourant().role;
-    this.afficher();
+    this.route.params.subscribe(
+      params => {
+        this.role=this.storageService.afficherUtilisateurCourant().role;
+        this.afficher();
+      });
   }
 
   afficher() {
@@ -81,7 +101,17 @@ export class SeancePage {
  
   // Calendar event was clicked
   async onEventSelected(event) {
-window.location.href="http://localhost:8080/"+event.id;
+//window.location.href="https://innovup.herokuapp.com/"+event.id;
+
+  //this.iab.create('https://innovup.herokuapp.com/'+event.id,'_blank',this.options).show();
+   
+   
+let navigationExtras: NavigationExtras = {
+  queryParams: {
+    id: event.id
+  }
+};
+this.router.navigate(['../room/'],navigationExtras);
 
   
   }

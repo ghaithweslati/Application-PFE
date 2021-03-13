@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Inscription</ion-title>
+    <ion-buttons slot="start" >
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<section>
+  <form >
+    <ion-item>
+      <ion-label><b>Username</b></ion-label>
+      <ion-input  [(ngModel)]="expert.username" name="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Nom</b></ion-label>
+      <ion-input  [(ngModel)]="expert.nom" name="nom"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Prenom</b></ion-label>
+      <ion-input  [(ngModel)]="expert.prenom" name="prenom"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Email</b></ion-label>
+      <ion-input  [(ngModel)]="expert.email" name="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Password</b></ion-label>
+      <ion-input  [(ngModel)]="expert.password" name="password" type="password"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label id="profile_image" stacked><b>Photo</b></ion-label>
+      <ion-input type="file" accept="image/*" (change)="changeListener($event)" style="color:transparent;" ></ion-input>
+    </ion-item>
+
+    <ion-list>
+      <ion-radio-group [(ngModel)]="role" name="role">
+        <ion-list-header>
+          <ion-label>Role</ion-label>
+        </ion-list-header>
+    
+        <ion-item>
+          <ion-label>Demandeur</ion-label>
+          <ion-radio slot="start" value="Demandeur" checked></ion-radio>
+        </ion-item>
+    
+        <ion-item>
+          <ion-label>Expert</ion-label>
+          <ion-radio slot="start" value="Expert"></ion-radio>
+        </ion-item>
+    
+      </ion-radio-group>
+    </ion-list>
+
+    <ion-item *ngIf="role=='Expert'">  
+      <ion-label>Domaine</ion-label> 
+      <ion-select [(ngModel)]="expert.domaine.id"  name="domaine">
+        <ion-select-option *ngFor="let domaine of domaines" [value] = "domaine.id">{{domaine.nom}}</ion-select-option>
+      </ion-select>
+    </ion-item>  
+
+
+    <ion-item *ngIf="role=='Expert'">
+      <ion-label><b>Specialite</b></ion-label>
+      <ion-input  [(ngModel)]="expert.specialite" name="expert"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="inscrire()">S'inscrire</ion-button>
+ 
+  </form>
+</section>
+
+
+</ion-content>

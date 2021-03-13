@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar  color="primary">
+    <ion-title>Domaine</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row no-padding>
+      <ion-col col-6 *ngFor="let domaine of domaines">
+              <div (click)="goPageSujet(domaine)">{{domaine.nom}}</div>
+      </ion-col>
+    </ion-row>
+</ion-grid>
+
+</ion-content>

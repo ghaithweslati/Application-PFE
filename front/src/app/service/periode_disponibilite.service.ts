@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class PeriodeDisponibiliteService {
 
-  public baseUrl = 'http://localhost:8080/periode_disponibilite';
+  public baseUrl = 'https://ghaith-weslati.herokuapp.com/periode_disponibilite';
 
 
   constructor(private http: HttpClient) { 

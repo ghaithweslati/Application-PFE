@@ -37,7 +37,8 @@ export class PaiementPage implements OnInit {
           const seance = {"dureeEffectif":0,"sujetId":params.id,"periodeSeanceId":res.data.id} 
           this.seanceService.ajouterSeance(seance).subscribe((res:any)=>
           {
-              window.location.href = "../tabs/seance"
+
+              this.router.navigate(['../tabs/seance'],);
           });    
         }
       });
