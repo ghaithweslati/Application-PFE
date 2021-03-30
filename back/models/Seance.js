@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../utils/database");
 
-const Duree = sequelize.define("seance", {
+/*const Duree = sequelize.define("seance", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -12,4 +12,23 @@ const Duree = sequelize.define("seance", {
   dureeEffectif: { type: Sequelize.INTEGER, allowNull: false },
 });
 
-module.exports = Duree;
+module.exports = Duree;*/
+
+
+
+class Seance {
+  constructor() {
+    this.id = {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    };
+    this.dureeEffectif = { type: Sequelize.INTEGER, allowNull: true };
+    this.status = { type: Sequelize.ENUM, values: ['EnAttente', 'EnCours', 'Cloture'] };
+  }
+
+}
+
+module.exports = Seance;
+
+

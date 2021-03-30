@@ -25,8 +25,10 @@ const PeriodeDisponibilite = require("./models/PeriodeDisponibilite");
 const PeriodeSeance = require("./models/PeriodeSeance");
 const Sujet = require("./models/Sujet");
 const Frais = require("./models/Frais");
-const Seance = require("./models/Seance");
+//const Seance = require("./models/Seance");
 const Domaine = require("./models/Domaine");
+const Conference = require("./models/Conference");
+const Consultation = require("./models/Consultation");
 
 
 
@@ -92,6 +94,7 @@ const fraisRoutes = require("./routes/frais");
 const seanceRoutes = require("./routes/seance");
 const domaineRoutes = require("./routes/domaine");
 const expertRoutes = require("./routes/expert");
+const consultationRoutes = require("./routes/consultation");
 
 /*const categoryRoutes = require("./routes/category");
 const placeHolderRoutes = require("./routes/placeHolder");
@@ -164,6 +167,7 @@ app.use("/frais", fraisRoutes);
 app.use("/seance", seanceRoutes);
 app.use("/domaine", domaineRoutes);
 app.use("/expert", expertRoutes);
+app.use("/consultation", consultationRoutes);
 
 
 /*
@@ -196,7 +200,7 @@ Expert.hasMany(PeriodeDisponibilite);
 Frais.belongsTo(Sujet);
 Sujet.hasMany(Frais);
 
-
+/*
 Seance.belongsTo(Sujet);
 Sujet.hasMany(Seance);
 
@@ -209,7 +213,34 @@ Seance.belongsTo(Demandeur);
 Demandeur.hasMany(Seance);
 
 Seance.belongsTo(PeriodeSeance);
-PeriodeSeance.hasOne(Seance);
+PeriodeSeance.hasOne(Seance);*/
+
+Consultation.belongsTo(Sujet);
+Sujet.hasMany(Consultation);
+
+Consultation.belongsTo(Demandeur);
+Demandeur.hasMany(Consultation);
+
+Conference.belongsTo(PeriodeSeance);
+PeriodeSeance.hasOne(Conference);
+
+Consultation.belongsTo(PeriodeSeance);
+PeriodeSeance.hasOne(Consultation);
+
+
+Demandeur.belongsToMany(Conference, {
+  through: "demandeur_conference",
+  as: "demandeurs",
+  foreignKey: "demandeurId",
+});
+
+Conference.belongsToMany(Demandeur, {
+  through: "demandeur_conference",
+  as: "conferences",
+  foreignKey: "conferenceId",
+});
+
+
 
 
 

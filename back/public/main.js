@@ -1,3 +1,8 @@
+const chatInputBox = document.getElementById("chat_message");
+const all_messages = document.getElementById("all_messages");
+const main__chat__window = document.getElementById("main__chat__window");
+const list = document.getElementById("list");
+
 const socket = io('/')
 const videoGrid = document.getElementById('videoGrid')
 const myVideo = document.createElement('video')
@@ -35,36 +40,23 @@ navigator.mediaDevices
             })
         })
 
-        let text = $('input')
-
-        $('html').keydown(function (e) {
-            if (e.which == 13 && text.val().length !== 0) {
-                socket.emit('message', text.val())
-                text.val('')
+        document.addEventListener("keydown", (e) => {
+            if (e.which === 13 && chatInputBox.value != "") {
+                socket.emit("message", chatInputBox.value);
+                chatInputBox.value = "";
             }
-        })
+        });
 
-        socket.on('createMessage', (message, userId) => {
-            $('ul').append(`<li >
-								<span class="messageHeader">
-									<span>
-										From 
-										<span class="messageSender">Someone</span> 
-										to 
-										<span class="messageReceiver">Everyone:</span>
-									</span>
-									${new Date().toLocaleString('en-US', {
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true,
-            })}
-								</span>
-								<span class="message">${message}</span>
-							
-							</li>`)
-            scrollToBottom()
-        })
-    })
+        socket.on("createMessage", (msg) => {
+            console.log(msg);
+
+            all_messages.innerHTML += "<p><b>" + "Ghaith Weslati : " + "</b>" + msg + "</p>";
+            main__chat__window.scrollTop = main__chat__window.scrollHeight;
+            document.getElementById('footer').scrollTop = document.getElementById('footer').scrollHeight
+
+        });
+    });
+
 
 socket.on('user-disconnected', (userId) => {
     if (peers[userId]) peers[userId].close()
@@ -123,16 +115,12 @@ const muteUnmute = () => {
 }
 
 const setMuteButton = () => {
-    const html = `
-	  <i class="fas fa-microphone"></i>
-	`
+    const html = `<i class="fas fa-microphone"></i>`
     document.querySelector('.mainMuteButton').innerHTML = html
 }
 
 const setUnmuteButton = () => {
-    const html = `
-	  <i class="unmute fas fa-microphone-slash"></i>
-	`
+    const html = `<i class="unmute fas fa-microphone-slash" ></i>`
     document.querySelector('.mainMuteButton').innerHTML = html
 }
 
@@ -149,16 +137,12 @@ const playStop = () => {
 }
 
 const setStopVideo = () => {
-    const html = `
-	  <i class="fas fa-video"></i>
-	`
+    const html = `< i class="fas fa-video" ></i>`
     document.querySelector('.mainVideoButton').innerHTML = html
 }
 
 const setPlayVideo = () => {
-    const html = `
-	<i class="stop fas fa-video-slash"></i>
-	`
+    const html = `<i class="stop fas fa-video-slash"></i>`
     document.querySelector('.mainVideoButton').innerHTML = html
 }
 

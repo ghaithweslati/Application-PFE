@@ -12,5 +12,6 @@ module.exports = {
   sujets: "sujets",
   periode_disponibilites: "periode_disponibilites",
   seances: "seances",
+  consultations: "consultations",
   experts: "experts",
 };

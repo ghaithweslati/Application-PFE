@@ -131,7 +131,7 @@ const CreateSpec = async (Model, req) => {
       userId = req.user.id;
       body = { ...req.body, expertId: userId };
       break;
-    case models_names.seances:
+    case models_names.consultations:
       const demandeurId = req.user.id;
       /*sujetId = req.params.sujetId;
       periodeSeanceId = req.params.periodeSeanceId*/
@@ -430,7 +430,7 @@ const GetAllSpec = async (Model, limit, offset, req) => {
         ],
       });
       break;
-    case models_names.seances:
+    case models_names.consultations:
       const userId = req.user.id;
       //  const role = req.params.role;
       if (role == "Demandeur") {

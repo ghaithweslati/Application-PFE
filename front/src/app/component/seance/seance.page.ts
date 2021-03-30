@@ -3,12 +3,12 @@ import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { CalModalPage } from '../../modal/cal-modal/cal-modal.page';
-import { SeanceService } from 'src/app/service/seance.service';
 import { Seance } from 'src/app/model/seance';
 import { PopoverPage } from 'src/app/modal/popover/popover.page';
 import { StorageService } from 'src/app/service/storage.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
+import { ConsultationService } from 'src/app/service/consultation.service';
 
 
 
@@ -46,7 +46,7 @@ export class SeancePage {
     private alertCtrl: AlertController,
     @Inject(LOCALE_ID) private locale: string,
     private modalCtrl: ModalController,
-    private seanceService:SeanceService,
+    private consultationService:ConsultationService,
     private storageService:StorageService,
     private popCtrl:PopoverController,
     private route:ActivatedRoute,
@@ -65,14 +65,14 @@ export class SeancePage {
   afficher() {
 
     
-    this.seanceService.afficherSeance(this.role).subscribe((res:any)=>
+    this.consultationService.afficherConsultation(this.role).subscribe((res:any)=>
     {
       var events=[];
         this.seances=res.data.rows;
         for(let i=0;i<this.seances.length;i++)
         {
           events.push({
-            title: this.seances[i].sujet.titre,
+            title: "Consultation : "+this.seances[i].sujet.titre,
             id:this.seances[i].id,
             startTime: new Date(this.seances[i].periode_seance.dateDeb),
             endTime: new Date(this.seances[i].periode_seance.dateFin),

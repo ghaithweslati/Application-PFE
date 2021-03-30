@@ -3,7 +3,7 @@ const Product = require("../models/Product");
 const producItems = require("../models/product-item");
 
 const getLook = lookId => {
-  var look = new Promise(function(resolve, reject) {
+  var look = new Promise(function (resolve, reject) {
     Look.findAll({
       where: { id: lookId },
       attributes: ["id", "name"],
