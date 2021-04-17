@@ -1,4 +1,4 @@
-export enum typeConference {
+export enum TypeConference {
     Gratuit="Gratuit",
     Payant="Payant"
   }

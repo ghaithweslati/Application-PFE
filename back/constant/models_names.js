@@ -10,8 +10,11 @@ module.exports = {
   disponibilites: "disponibilites",
   periodes: "periodes",
   sujets: "sujets",
+  frais: "frais",
   periode_disponibilites: "periode_disponibilites",
   seances: "seances",
   consultations: "consultations",
+  conferences: "conferences",
   experts: "experts",
+
 };

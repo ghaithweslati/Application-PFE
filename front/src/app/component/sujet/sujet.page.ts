@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { SujetModalPage } from 'src/app/modal/sujet-modal/sujet-modal.page';
 import { Expert } from 'src/app/model/expert';
@@ -9,6 +9,7 @@ import { ExpertService } from 'src/app/service/expert.service';
 import { StorageService } from 'src/app/service/storage.service';
 import { SujetService } from '../../service/sujet.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ParametreModalPage } from 'src/app/modal/parametre-modal/parametre-modal.page';
 
 
 
@@ -34,6 +35,7 @@ export class SujetPage implements OnInit {
     private modalCtrl:ModalController,
     private route:ActivatedRoute,
     private _sanitizer: DomSanitizer,
+    private popCtrl:PopoverController,
     private router: Router) {
   }
 
@@ -71,12 +73,20 @@ export class SujetPage implements OnInit {
     if(role=="Demandeur")
     {
 
-          this.expertService.afficherExperts().subscribe(res=>
-            {
-              this.experts=res.data.rows;
-            });
+      this.route.queryParams.subscribe(params => {
+        if (params) {
+
+          const idDomaine=params.idDomaine;
+        
+        this.expertService.afficherExpertsParDomaine(idDomaine).subscribe(res=>
+          {
+            this.experts=res.data.rows;
+          });
         }
+      });
     }
+  }
+  
 
 
   afficherLesSujets()
@@ -147,11 +157,21 @@ export class SujetPage implements OnInit {
   base64image(photo)
   {
     if(photo)
-      return this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' 
-      + photo);
+      return this._sanitizer.bypassSecurityTrustResourceUrl(photo);
     else
       return "assets/icon/user.png";
-      
-
   }
+
+
+  async initParametres(ev)
+  {
+      const popover = await this.popCtrl.create(
+        {
+          component:ParametreModalPage,
+          event:ev,
+        }
+      )
+      return await popover.present();
+  }
+
 }

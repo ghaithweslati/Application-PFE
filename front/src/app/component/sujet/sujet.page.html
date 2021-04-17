@@ -5,9 +5,13 @@
       <ion-title>
         {{titre}}
       </ion-title>
+      
       <ion-buttons slot="end" *ngIf="role=='Expert'">
         <ion-button (click)="openSujetModal()">
           <ion-icon name="add" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button (click)="initParametres($event)">
+          <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>

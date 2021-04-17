@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 
 const Demandeur = require("../models/Demandeur");
 const Expert = require("../models/Expert");
+const Administrateur = require("../models/Administrateur");
 const passport = require("passport");
 const utils = require("../utils/utils");
 
@@ -27,6 +28,7 @@ exports.signup = (req, res, next) => {
       prenom: req.body.prenom,
       email: req.body.email,
       photo: req.body.photo,
+      etat: req.body.etat,
       hash: hash,
       salt: salt,
     });
@@ -41,6 +43,7 @@ exports.signup = (req, res, next) => {
       photo: req.body.photo,
       domaineId: req.body.domaineId,
       specialite: req.body.specialite,
+      etat: req.body.etat,
       hash: hash,
       salt: salt,
     });
@@ -70,7 +73,39 @@ exports.login = (req, res, next) => {
         Demandeur.findOne({ where: { email: req.body.email } })
           .then((user) => {
             if (!user) {
-              res.status(401).json({ success: false, msg: "could not find user" });
+              Administrateur.findOne({ where: { email: req.body.email } })
+                .then((user) => {
+                  if (!user) {
+                    res.status(401).json({ success: false, msg: "Utilisateur inexistant" });
+                  }
+                  else {
+                    const isValid = utils.validPassword(
+                      req.body.password,
+                      user.hash,
+                      user.salt
+                    );
+
+                    if (isValid) {
+                      const tokenObject = utils.issueJWT(user);
+
+                      res.status(200).json({
+                        success: true,
+                        user: user,
+                        token: tokenObject.token,
+                        type: "Administrateur",
+                        expiresIn: tokenObject.expires,
+                      });
+                    } else {
+                      res
+                        .status(401)
+                        .json({ success: false, msg: "you entered the wrong password" });
+                    }
+
+                  }
+                })
+                .catch((err) => {
+                  next(err);
+                });
             }
             else {
 
@@ -87,6 +122,7 @@ exports.login = (req, res, next) => {
                 res.status(200).json({
                   success: true,
                   user: user,
+                  type: "Demandeur",
                   token: tokenObject.token,
                   expiresIn: tokenObject.expires,
                 });
@@ -117,6 +153,7 @@ exports.login = (req, res, next) => {
           res.status(200).json({
             success: true,
             user: user,
+            type: "Expert",
             token: tokenObject.token,
             expiresIn: tokenObject.expires,
           });

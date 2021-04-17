@@ -9,12 +9,7 @@
 
 <ion-content [fullscreen]="true">
 <section>
-  <form >
-    <ion-item>
-      <ion-label><b>Username</b></ion-label>
-      <ion-input  [(ngModel)]="expert.username" name="username"></ion-input>
-    </ion-item>
-
+  <ion-list >
     <ion-item>
       <ion-label><b>Nom</b></ion-label>
       <ion-input  [(ngModel)]="expert.nom" name="nom"></ion-input>
@@ -40,7 +35,6 @@
       <ion-input type="file" accept="image/*" (change)="changeListener($event)" style="color:transparent;" ></ion-input>
     </ion-item>
 
-    <ion-list>
       <ion-radio-group [(ngModel)]="role" name="role">
         <ion-list-header>
           <ion-label>Role</ion-label>
@@ -57,8 +51,7 @@
         </ion-item>
     
       </ion-radio-group>
-    </ion-list>
-
+  
     <ion-item *ngIf="role=='Expert'">  
       <ion-label>Domaine</ion-label> 
       <ion-select [(ngModel)]="expert.domaine.id"  name="domaine">
@@ -72,9 +65,11 @@
       <ion-input  [(ngModel)]="expert.specialite" name="expert"></ion-input>
     </ion-item>
 
+  <ion-item>
     <ion-button expand="block" (click)="inscrire()">S'inscrire</ion-button>
+  </ion-item>
  
-  </form>
+  </ion-list>
 </section>
 
 

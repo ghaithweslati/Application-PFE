@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/service/storage.service';
 
 @Component({
@@ -6,11 +6,17 @@ import { StorageService } from 'src/app/service/storage.service';
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss']
 })
-export class TabsPage {
+export class TabsPage implements OnInit {
 
   role="";
   constructor(private storageService:StorageService) {
-    this.role=this.storageService.afficherUtilisateurCourant().role;
   }
 
+
+  ngOnInit(): void {
+      this.role=this.storageService.afficherUtilisateurCourant().role
+  }
+
+
+  
 }

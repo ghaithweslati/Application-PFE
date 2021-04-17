@@ -1,7 +1,7 @@
+import { EtatUtilisateur } from "../Enum/EtatUtilisateur";
 
 export class Utilisateur {
     id: number;
-      username: string;
       nom: string;
       prenom: string;
       email: string;
@@ -9,4 +9,5 @@ export class Utilisateur {
       hash: string;
       salt: string;
       photo: Text;
+      etat:EtatUtilisateur;
 }

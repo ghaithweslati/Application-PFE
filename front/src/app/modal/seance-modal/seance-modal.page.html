@@ -1,0 +1,25 @@
+<ion-toolbar color="primary">
+  <b>Noter la consultation</b>
+  <ion-buttons slot="start">
+    <ion-button (click)="close()">
+      <ion-icon name="close" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-buttons slot="end">
+    <ion-button (click)="save()">
+      <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+ 
+<ion-content>
+  <div class="rating">
+    <div class="stars">
+      <i class="fa fa-star gold" (click)="noter(1)"></i>
+      <i class="fa fa-star gold" (click)="noter(2)"></i>
+      <i class="fa fa-star" (click)="noter(3)" ></i>
+      <i class="fa fa-star" (click)="noter(4)"></i>
+      <i class="fa fa-star" (click)="noter(5)"></i>
+    </div>
+  </div>
+</ion-content>

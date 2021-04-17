@@ -22,4 +22,12 @@ export class FraisService {
     });
     return this.http.post(`${this.baseUrl}/`, object, { headers: reqHeader });
   }
+
+  supprimerFrais(id:number): Observable<Object> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+    return this.http.delete(`${this.baseUrl}/${id}`, { headers: reqHeader });
+  }
 }

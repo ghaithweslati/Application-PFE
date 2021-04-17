@@ -4,6 +4,9 @@
     <ion-buttons slot="start" >
       <ion-back-button></ion-back-button>
     </ion-buttons>
+    <ion-buttons *ngIf="role=='Expert'" slot="end"  (click)="initSujet()">
+      <ion-icon name="create" ></ion-icon>
+    </ion-buttons>
     <ion-buttons *ngIf="role=='Expert'" slot="end"  (click)="presentAlertConfirm()">
       <ion-icon name="trash" ></ion-icon>
     </ion-buttons>
@@ -12,6 +15,22 @@
 
 <ion-content>
   <ion-list>
+
+    
+    <ion-list-header>
+      Expert
+    </ion-list-header>
+    <ion-item>
+      <ion-avatar slot="start">
+        <img [src]="base64image(sujet.expert.photo)">
+      </ion-avatar>
+      <ion-label>
+        <h3>{{sujet.expert.nom}} {{sujet.expert.prenom}}</h3>
+        <p>{{sujet.expert.specialite}}</p>
+      </ion-label>
+    </ion-item>
+
+
     <ion-list-header>
       Informations
     </ion-list-header>
@@ -30,15 +49,6 @@
       </ion-label>
     </ion-item>
 
-    <ion-item>
-      <ion-label>
-        <h3>Expert</h3>
-        <p>{{sujet.expert.nom}} {{sujet.expert.prenom}}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-list>
     <ion-list-header>
       Frais
     </ion-list-header>
@@ -51,6 +61,12 @@
       </ion-label>
     </ion-item>
     </div>
+
+    <ion-item  *ngIf="sujet.frais.length==0">
+      <ion-label>
+        <h3>Gratuit</h3>
+      </ion-label>
+    </ion-item>
   </ion-list>
 
 

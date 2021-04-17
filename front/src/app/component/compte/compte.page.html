@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mon Compte</ion-title>
+    <ion-buttons slot="start" >
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="modifier()">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<section>
+  <ion-list >
+    <ion-item>
+      <ion-label><b>Nom</b></ion-label>
+      <ion-input  [(ngModel)]="utilisateur.nom" name="nom"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Prenom</b></ion-label>
+      <ion-input  [(ngModel)]="utilisateur.prenom" name="prenom"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Email</b></ion-label>
+      <ion-input  [(ngModel)]="utilisateur.email" name="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label id="profile_image" stacked><b>Photo</b></ion-label>
+      <ion-input type="file" accept="image/*" (change)="changeListener($event)" style="color:transparent;" ></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="role=='Expert'">  
+      <ion-label>Domaine</ion-label> 
+      <ion-select [(ngModel)]="utilisateur.domaine.id"  name="domaine">
+        <ion-select-option *ngFor="let domaine of domaines" [value] = "domaine.id">{{domaine.nom}}</ion-select-option>
+      </ion-select>
+    </ion-item>  
+
+
+    <ion-item *ngIf="role=='Expert'">
+      <ion-label><b>Specialite</b></ion-label>
+      <ion-input  [(ngModel)]="utilisateur.specialite" name="expert"></ion-input>
+    </ion-item>
+
+  </ion-list>
+</section>
+
+
+</ion-content>

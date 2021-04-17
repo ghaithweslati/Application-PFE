@@ -1,4 +1,4 @@
-export enum statusSeance {
+export enum StatusSeance {
     EnAttente="EnAttente",
     EnCours="EnCours",
     Cloture="Cloture"

@@ -9,14 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room</title>
     <style>
+        *::first-letter {
+            text-transform: uppercase;
+        }
+
         body {
             margin: 0;
         }
 
-        ion-list {
-            width: 100%;
-            height: 100%;
-        }
+
 
         #all_messages {
             margin: 3%;
@@ -28,6 +29,7 @@
             display: flex;
             flex-direction: column;
         }
+
 
         #videoGrid section {
             flex: 1;
@@ -83,7 +85,7 @@
 
 <body>
     <ion-toolbar color="primary">
-        <ion-title>Video Call Room</ion-title>
+        <ion-title id="sujet"></ion-title>
     </ion-toolbar>
     <ion-content color="dark">
         <div id="videoGrid">
@@ -93,7 +95,7 @@
     <ion-footer id="footer">
         <div class="main__right">
             <ion-list>
-                <ion-list-footer>
+                <ion-list-footer id="list">
                     <div class="main__chat__window" id="main__chat__window">
                         <ul class="messages" id="all_messages"></ul>
                     </div>
@@ -118,10 +120,10 @@
                     <div onclick="playStop()" class="mainControlsButton mainVideoButton">
                         <i class="fas fa-video"></i>
                     </div>
-                    <div class="mainControlsButton">
+                    <div onclick="displayMessages()" class="mainControlsButton">
                         <i class="fas fa-comment-alt"></i>
                     </div>
-                    <div onclick="leave()" class="mainControlsButtonEndMeeting">
+                    <div onClick="leave()" class="mainControlsButtonEndMeeting">
                         <i class="fas fa-phone-slash"></i>
                     </div>
                 </div>

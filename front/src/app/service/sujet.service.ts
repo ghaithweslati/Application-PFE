@@ -39,6 +39,13 @@ export class SujetService {
     return this.http.delete(`${this.baseUrl}/${id}`, { headers: reqHeader });
   }
 
+  modifierSujet(sujet:Object,id: number): Observable<any> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+    return this.http.put(`${this.baseUrl}/${id}`,sujet, { headers: reqHeader });
+  }
 
 
   afficherTousSujets(role,id): Observable<any> {

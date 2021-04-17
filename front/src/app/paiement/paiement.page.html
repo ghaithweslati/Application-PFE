@@ -4,16 +4,17 @@
       Payer
     </ion-button>
   </ion-buttons>
+
 </ion-toolbar>
  
 <ion-content>
   <ion-item>
     <ion-label position="stacked">Date</ion-label>
-    <ion-datetime value="1990-02-19" [(ngModel)]="date" placeholder="Select Date"></ion-datetime>
+    <ion-datetime disabled [(ngModel)]="date" placeholder="Select Date"></ion-datetime>
   </ion-item>
   <ion-item>
     <ion-label position="stacked">Heure début</ion-label>
-    <ion-datetime name="heureDeb" display-format="h:mm A"  [(ngModel)]="heureDeb"  picker-format="h:mm A" minuteValues="0,15,30,45"></ion-datetime>
+    <ion-datetime name="heureDeb" display-format="h:mm A" [(ngModel)]="heureDeb"  picker-format="h:mm A" minuteValues="0,15,30,45"></ion-datetime>
   </ion-item>
   <ion-item>
     <ion-label position="stacked">Heure Fin</ion-label>

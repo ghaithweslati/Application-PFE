@@ -12,12 +12,27 @@ export class ExpertService {
   constructor(private http: HttpClient) { 
   }
 
-
   afficherExperts(): Observable<any> {
     var reqHeader = new HttpHeaders({ 
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('token'),
     });
     return this.http.get(`${this.baseUrl}`,{ headers: reqHeader });
+  }
+
+  afficherExpertsParDomaine(domaine): Observable<any> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+    return this.http.get(`${this.baseUrl}/${domaine}`,{ headers: reqHeader });
+  }
+
+  modifierExpert(expert:Object,id: number): Observable<any> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+    return this.http.put(`${this.baseUrl}/${id}`,expert, { headers: reqHeader });
   }
 }

@@ -21,6 +21,7 @@ const morgan = require("morgan");
 /* database tables */
 const Expert = require("./models/Expert");
 const Demandeur = require("./models/Demandeur");
+const Administrateur = require("./models/Administrateur");
 const PeriodeDisponibilite = require("./models/PeriodeDisponibilite");
 const PeriodeSeance = require("./models/PeriodeSeance");
 const Sujet = require("./models/Sujet");
@@ -29,6 +30,7 @@ const Frais = require("./models/Frais");
 const Domaine = require("./models/Domaine");
 const Conference = require("./models/Conference");
 const Consultation = require("./models/Consultation");
+const Participation = require("./models/Participation");
 
 
 
@@ -94,7 +96,12 @@ const fraisRoutes = require("./routes/frais");
 const seanceRoutes = require("./routes/seance");
 const domaineRoutes = require("./routes/domaine");
 const expertRoutes = require("./routes/expert");
+const demandeurRoutes = require("./routes/demandeur");
+const administrateurRoutes = require("./routes/administrateur");
 const consultationRoutes = require("./routes/consultation");
+const conferenceRoutes = require("./routes/conference");
+const participationRoutes = require("./routes/participation");
+
 
 /*const categoryRoutes = require("./routes/category");
 const placeHolderRoutes = require("./routes/placeHolder");
@@ -167,7 +174,11 @@ app.use("/frais", fraisRoutes);
 app.use("/seance", seanceRoutes);
 app.use("/domaine", domaineRoutes);
 app.use("/expert", expertRoutes);
+app.use("/demandeur", demandeurRoutes);
+app.use("/administrateur", administrateurRoutes);
 app.use("/consultation", consultationRoutes);
+app.use("/conference", conferenceRoutes);
+app.use("/participation", participationRoutes);
 
 
 /*
@@ -221,66 +232,21 @@ Sujet.hasMany(Consultation);
 Consultation.belongsTo(Demandeur);
 Demandeur.hasMany(Consultation);
 
-Conference.belongsTo(PeriodeSeance);
-PeriodeSeance.hasOne(Conference);
 
 Consultation.belongsTo(PeriodeSeance);
 PeriodeSeance.hasOne(Consultation);
 
 
-Demandeur.belongsToMany(Conference, {
-  through: "demandeur_conference",
-  as: "demandeurs",
-  foreignKey: "demandeurId",
-});
+Conference.belongsTo(PeriodeSeance);
+PeriodeSeance.hasOne(Conference);
 
-Conference.belongsToMany(Demandeur, {
-  through: "demandeur_conference",
-  as: "conferences",
-  foreignKey: "conferenceId",
-});
+Conference.belongsTo(Sujet);
+Sujet.hasOne(Conference);
 
 
+Demandeur.belongsToMany(Conference, { through: Participation })
+Conference.belongsToMany(Demandeur, { through: Participation })
 
-
-
-/*Disponibilite.belongsTo(Utilisateur);
-Utilisateur.hasMany(Disponibilite);
-
-Periode.belongsTo(Disponibilite);
-Disponibilite.hasMany(Periode);
-
-Sujet.belongsTo(Utilisateur);
-Utilisateur.hasMany(Sujet);
-
-Frais.belongsTo(Sujet);
-Sujet.hasMany(Frais);
-
-
-Customer.belongsTo(User);
-User.hasMany(Customer);
-
-Dressing.belongsTo(User);
-User.hasMany(Dressing);
-
-Dressing.belongsTo(Customer);
-Customer.hasMany(Dressing);
-
-Look.belongsTo(User);
-User.hasMany(Look);
-
-Look.belongsTo(Dressing);
-Dressing.hasMany(Look);
-
-Look.belongsToMany(Product, { through: ProductItem });
-Product.belongsToMany(Look, { through: ProductItem });
-
-Product.belongsTo(Category);
-Category.hasMany(Product);
-
-PlaceHolder.belongsTo(Category);
-Category.hasMany(PlaceHolder);
-*/
 
 
 const server = require('http').Server(app)

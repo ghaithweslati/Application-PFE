@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Utilisateurs
+    </ion-title>
+    <ion-buttons slot="end">
+    <ion-button (click)="initParametres($event)">
+      <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment (ionChange)="segmentChanged($event)"  [(ngModel)]="role">
+    <ion-segment-button value="demandeur">
+      <ion-label>Demandeurs</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="expert">
+      <ion-label>Experts</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="administrateur">
+      <ion-label>Administrateurs</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+<ion-list>
+  <ion-item *ngFor="let utilisateur of utilisateurs" >
+    <ion-avatar slot="start">
+      <img [src]="base64image(utilisateur.photo)">
+    </ion-avatar>
+    <ion-label>
+      <h3>{{utilisateur.prenom}} {{utilisateur.nom}}</h3>
+      <p>{{utilisateur.email}}</p>
+    </ion-label>
+    <ion-icon name="close" *ngIf="utilisateur.etat=='Actif'" (click)="presentAlertConfirmBannir(utilisateur)"></ion-icon>
+    <ion-icon name="checkmark"  *ngIf="utilisateur.etat=='Banni'" (click)="presentAlertConfirmActiver(utilisateur)"></ion-icon>
+  </ion-item>
+</ion-list>
+
+</ion-content>

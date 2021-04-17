@@ -30,6 +30,9 @@ vidUrl:SafeResourceUrl;
   }
 
   ngOnInit() {
+
+
+    localStorage.setItem("status","cloture");
         
     if (this.platform.is('cordova')) {
       this.platform.ready().then(() => {
@@ -45,7 +48,7 @@ vidUrl:SafeResourceUrl;
     this.route.queryParams.subscribe(params => {
       if (params) {
      //this.vidUrl="https://ghaith-weslati.herokuapp.com/"+params.id
-      this.vidUrl=this.domSantizer.bypassSecurityTrustResourceUrl("https://ghaith-weslati.herokuapp.com/"+params.id)
+      this.vidUrl=this.domSantizer.bypassSecurityTrustResourceUrl("https://ghaith-weslati.herokuapp.com/"+params.id+"?sujet="+params.sujet/*+"&duree"+params.duree+"*/+"&role="+params.role+"&nom="+params.nom)
 
       }
     });

@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
    
 
   ngOnInit() {
-  
+    localStorage.removeItem("status");
   }
 
   login()
@@ -40,13 +40,9 @@ export class LoginPage implements OnInit {
       //  this.storage.set('token', res.token+"");
         //this.presentToast("Authentification réussit");*/
         var user =res.user;
-        var direction="";
-        if ('specialite' in user) {
-          user.role="Expert"
-        }
-        else
-        {
-          user.role="Demandeur"
+        user.role=res.type;
+        var direction="/";
+        if (user.role=="Administrateur") {
           direction+="/domaine"
         }
         localStorage.setItem('token',res.token);

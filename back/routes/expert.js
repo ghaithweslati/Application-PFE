@@ -11,8 +11,23 @@ const router = express.Router();
 router.get(
   "/",
   // isAuth,
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   expertController.getAllExpert
 );
+
+router.get(
+  "/:domaineId",
+  // isAuth,
+  //passport.authenticate("jwt", { session: false }),
+  expertController.getAllExpert
+);
+
+router.put(
+  "/:id",
+  // isAuth
+  passport.authenticate("jwt", { session: false }),
+  expertController.updateExpert
+);
+
 
 module.exports = router;

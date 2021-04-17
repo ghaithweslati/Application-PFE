@@ -50,4 +50,12 @@ router.delete(
   sujetController.deleteSujet
 );
 
+
+router.put(
+  "/:id",
+  // isAuth
+  passport.authenticate("jwt", { session: false }),
+  sujetController.editSujet
+);
+
 module.exports = router;

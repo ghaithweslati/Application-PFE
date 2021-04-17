@@ -1,0 +1,68 @@
+<ion-toolbar color="primary">
+
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="../"></ion-back-button>
+ </ion-buttons>
+ 
+    <ion-title>Conférence</ion-title>
+
+  <ion-buttons slot="end"  (click)="ajouterConference()">
+    <ion-icon slot="icon-only"  name="checkmark-circle" ></ion-icon>
+  </ion-buttons>
+</ion-toolbar>
+ 
+<ion-content>
+  <ion-list lines="full" class="ion-no-margin">
+    <ion-list-header lines="full">
+      <ion-label>
+        Sujet
+      </ion-label>
+    </ion-list-header>
+    <ion-item>  
+      <ion-label>Titre</ion-label> 
+      <ion-select [(ngModel)]="conference.sujet.id"  name="sujet">
+        <ion-select-option *ngFor="let sujet of sujets" [value] = "sujet.id">{{sujet.titre}}</ion-select-option>
+      </ion-select>
+    </ion-item>  
+
+    <ion-radio-group [(ngModel)]="type" name="type">
+      <ion-list-header>
+        <ion-label>Type</ion-label>
+      </ion-list-header>
+  
+      <ion-item>
+        <ion-label>Payant</ion-label>
+        <ion-radio slot="start" value="Payant" checked></ion-radio>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Gratuit</ion-label>
+        <ion-radio slot="start" value="Expert"></ion-radio>
+      </ion-item>
+  
+    </ion-radio-group>
+
+    <ion-list-header lines="full">
+      <ion-label>
+        Période
+      </ion-label>
+    </ion-list-header>
+  <ion-item>
+    <ion-label position="stacked">Date</ion-label>
+    <ion-datetime value="1990-02-19" [(ngModel)]="date" placeholder="Select Date"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Heure début</ion-label>
+    <ion-datetime name="heureDeb" display-format="h:mm A"  [(ngModel)]="heureDeb"  picker-format="h:mm A" minuteValues="0,15,30,45"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Heure Fin</ion-label>
+    <ion-datetime name="heureFin" display-format="h:mm A"  [(ngModel)]="heureFin"  picker-format="h:mm A" minuteValues="0,15,30,45"></ion-datetime>
+  </ion-item>
+  
+
+  </ion-list>
+
+
+ 
+</ion-content>

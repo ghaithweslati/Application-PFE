@@ -41,7 +41,27 @@ const routes: Routes = [
   {
     path: 'domaine',
     loadChildren: () => import('./component/domaine/domaine.module').then( m => m.DomainePageModule)
-  }
+  },
+  {
+    path: 'conference',
+    loadChildren: () => import('./component/conference/conference.module').then( m => m.ConferencePageModule)
+  },
+  {
+    path: 'seance-detail',
+    loadChildren: () => import('./component/seance-detail/seance-detail.module').then( m => m.SeanceDetailPageModule)
+  },
+  {
+    path: 'seance-modal',
+    loadChildren: () => import('./modal/seance-modal/seance-modal.module').then( m => m.SeanceModalPageModule)
+  },
+  {
+    path: 'parametre-modal',
+    loadChildren: () => import('./modal/parametre-modal/parametre-modal.module').then( m => m.ParametreModalPageModule)
+  },
+  {
+    path: 'compte',
+    loadChildren: () => import('./component/compte/compte.module').then( m => m.ComptePageModule)
+  },
 ];
 @NgModule({
   imports: [

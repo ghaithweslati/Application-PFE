@@ -5,9 +5,12 @@
       <ion-title>
         Séance
       </ion-title>
-      <ion-buttons slot="end" *ngIf="role=='Expert'">
-        <ion-button (click)="openCalModal()">
+      <ion-buttons slot="end" >
+        <ion-button *ngIf="role=='Expert'" (click)="ajouterConferencePage()">
           <ion-icon name="add" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button (click)="initParametres($event)">
+          <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -16,13 +19,13 @@
   <ion-content>
     <ion-segment [(ngModel)]="calendar.mode">
       <ion-segment-button value="month">
-        <ion-label>Month</ion-label>
+        <ion-label>Mois</ion-label>
       </ion-segment-button>
       <ion-segment-button value="week">
-        <ion-label>Week</ion-label>
+        <ion-label>Semaine</ion-label>
       </ion-segment-button>
       <ion-segment-button value="day">
-        <ion-label>Day</ion-label>
+        <ion-label>Jour</ion-label>
       </ion-segment-button>
     </ion-segment>
 

@@ -39,15 +39,16 @@ router.post(
   fraisController.createFrais
 );
 
-/*
-// DELETE /periode/periodeId
+
+
 router.delete(
   "/:id",
   // isAuth
   passport.authenticate("jwt", { session: false }),
-  periodeController.deletePeriode
+  fraisController.deleteFrais
 );
 
+/*
 // PUT /periode/periodeId
 router.put(
   "/:id",

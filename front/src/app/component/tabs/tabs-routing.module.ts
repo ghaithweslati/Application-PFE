@@ -20,8 +20,8 @@ const routes: Routes = [
         loadChildren: () => import('../disponibilite/disponibilite.module').then(m => m.DisponibilitePageModule)
       },
       {
-        path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        path: 'utilisateur',
+        loadChildren: () => import('../utilisateur/utilisateur.module').then(m => m.UtilisateurPageModule)
       },
       {
         path: 'seance',
@@ -29,7 +29,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/sujet',
+        redirectTo: '/tabs/seance',
         pathMatch: 'full'
       }
     ]

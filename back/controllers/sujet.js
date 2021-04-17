@@ -4,4 +4,5 @@ const factory = require("./handlerFactory");
 exports.getAllSujet = factory.getAll(Sujet);
 exports.createSujet = factory.createOne(Sujet);
 exports.deleteSujet = factory.deleteOne(Sujet);
+exports.editSujet = factory.updateOne(Sujet);
 exports.getSujet = factory.getOne(Sujet);

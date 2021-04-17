@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
+import { EtatUtilisateur } from 'src/app/Enum/EtatUtilisateur';
 import { Domaine } from 'src/app/model/domaine';
 import { Expert } from 'src/app/model/expert';
 import { Utilisateur } from 'src/app/model/utilisateur';
@@ -34,9 +35,10 @@ export class InscriptionPage implements OnInit {
 
   
   inscrire() {
-
-   
+    this.expert.etat=EtatUtilisateur.Actif;
     var user=Object.assign(this.expert,{'role':this.role},{'domaineId':this.expert.domaine.id});
+    alert(JSON.stringify(user))
+    /*
     this.authService.inscrire(user).subscribe((res:any) => {
       const nouveauUtilisateur=res.user;
       nouveauUtilisateur.role=this.role;      
@@ -44,7 +46,7 @@ export class InscriptionPage implements OnInit {
       this.storageService.setUtilisateurCourant(nouveauUtilisateur);
       this.router.navigate(['./tabs'],);
     }, 
-    error => console.log(error));
+    error => console.log(error));*/
    
   }
 

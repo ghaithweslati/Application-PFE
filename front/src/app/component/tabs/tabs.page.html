@@ -2,7 +2,7 @@
 
   <ion-tab-bar slot="bottom">
 
-    <ion-tab-button *ngIf="role=='Demandeur'" tab="domaine">
+    <ion-tab-button *ngIf="role!='Expert'" tab="domaine">
       <ion-icon name="apps"></ion-icon>
       <ion-label>Domaine</ion-label>
     </ion-tab-button>
@@ -17,9 +17,14 @@
       <ion-label>Disponibilité</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="seance">
+    <ion-tab-button *ngIf="role!='Administrateur'" tab="seance" >
       <ion-icon name="videocam"></ion-icon>
       <ion-label>Séance</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="role=='Administrateur'" tab="utilisateur" >
+      <ion-icon name="people"></ion-icon>
+      <ion-label>Utilisateur</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 

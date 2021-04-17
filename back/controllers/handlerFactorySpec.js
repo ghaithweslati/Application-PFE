@@ -9,6 +9,7 @@ const Disponibilite = require("../models/Disponibilite");
 const PeriodeSeance = require("../models/PeriodeSeance");
 const Sujet = require("../models/Sujet");
 const Frais = require("../models/Frais");
+const Participation = require("../models/Participation");
 const Op = Sequelize.Op;
 
 const DeleteSpec = async (Model, req) => {
@@ -18,6 +19,11 @@ const DeleteSpec = async (Model, req) => {
   let productId;
 
   switch (Model.getTableName()) {
+    case models_names.frais:
+      doc = await Model.destroy({
+        where: { sujetId: req.params.id },
+      });
+      break;
     case models_names.customers:
       userId = req.user.id;
       doc = await Model.destroy({
@@ -202,11 +208,73 @@ const GetOneSpec = async (Model, req) => {
         include: [
           {
             model: Frais,
-            attributes: ["prix", "duree"]
+            attributes: ["prix", "duree"],
           },
           {
             model: Expert,
-            attributes: ["id", "nom", "prenom"]
+            attributes: ["id", "nom", "prenom", "photo", "specialite"]
+          }
+        ],
+      });
+      break;
+    case models_names.consultations:
+      const consultationId = req.params.consultationId;
+      query = Model.findOne({
+        where: { id: consultationId },
+        include: [
+          {
+            model: Demandeur,
+            attributes: ["id", "nom", "prenom", "photo"]
+          },
+          {
+            model: PeriodeSeance,
+            attributes: ["dateDeb", "dateFin"]
+          },
+          {
+            model: Sujet,
+            attributes: ["id", "titre"],
+            include: [
+              {
+                model: Expert,
+                attributes: ["id", "nom", "prenom", "photo"],
+              },
+              {
+                model: Frais,
+                attributes: ["duree", "prix"],
+                order: [["duree", "DESC"]]
+              },
+            ]
+          }
+        ]
+      });
+      break;
+    case models_names.conferences:
+      const conferenceId = req.params.conferenceId;
+      query = Model.findOne({
+        where: { id: conferenceId },
+        include: [
+          {
+            model: Demandeur,
+            attributes: ["id", "nom", "prenom", "photo"]
+          },
+          {
+            model: PeriodeSeance,
+            attributes: ["dateDeb", "dateFin"]
+          },
+          {
+            model: Sujet,
+            attributes: ["id", "titre"],
+            include: [
+              {
+                model: Expert,
+                attributes: ["id", "nom", "prenom", "photo"]
+              },
+              {
+                model: Frais,
+                attributes: ["duree", "prix"],
+                order: [["duree", "DESC"]]
+              }
+            ]
           }
         ],
       });
@@ -431,8 +499,10 @@ const GetAllSpec = async (Model, limit, offset, req) => {
       });
       break;
     case models_names.consultations:
-      const userId = req.user.id;
-      //  const role = req.params.role;
+      userId = req.user.id;
+      const dateDeb = req.params.dateDeb;
+      const dateFin = req.params.dateFin;
+
       if (role == "Demandeur") {
         query = Model.findAndCountAll({
           where:
@@ -452,7 +522,7 @@ const GetAllSpec = async (Model, limit, offset, req) => {
           ],
         });
       }
-      else {
+      else if (role == "Expert") {
         query = Model.findAndCountAll({
           include: [
             {
@@ -470,6 +540,100 @@ const GetAllSpec = async (Model, limit, offset, req) => {
               model: Demandeur,
             }
           ],
+        });
+      }
+      else {
+        query = Model.findAndCountAll({
+
+          include: [
+            {
+              model: PeriodeSeance,
+              where:
+              {
+                dateDeb: {
+                  [Op.gte]: dateDeb,
+                },
+                dateFin: {
+                  [Op.lte]: dateFin,
+                },
+              },
+              order: [["dateDeb", "ASC"]],
+            },
+          ],
+        });
+      }
+      break;
+    case models_names.conferences:
+      userId = req.user.id;
+      //  const role = req.params.role;
+      if (role == "Demandeur") {
+        query = Model.findAndCountAll({
+          include: [
+            {
+              model: PeriodeSeance,
+              where:
+              {
+                dateFin: {
+                  [Op.gte]: new Date(),
+                },
+              },
+            },
+            {
+              model: Sujet
+            }
+          ],
+        });
+
+        /*      query2 = Model.findAndCountAll({
+                include: [
+                  {
+                    model: PeriodeSeance,
+                    where:
+                    {
+                      dateFin: {
+                        [Op.gte]: new Date(),
+                      },
+                    },
+                  },
+                  {
+                    model: Sujet
+                  },
+                  {
+                    model: Participation,
+                    where: { demandeurId: userId },
+                    attributes: []
+                  },
+                ],
+              });
+              query.data.rows.concat(query2.data.rows)*/
+      }
+      else {
+        query = Model.findAndCountAll({
+          include: [
+            {
+              model: Sujet,
+              where:
+              {
+                expertId: userId,
+              },
+            },
+            {
+              model: PeriodeSeance,
+            }
+          ],
+        });
+      }
+      break;
+    case models_names.experts:
+      domaineId = req.params.domaineId;
+      if (!domaineId) {
+        query = Model.findAndCountAll({
+
+        });
+      }
+      else {
+        query = Model.findAndCountAll({
+          where: { domaineId: domaineId }
         });
       }
       break;

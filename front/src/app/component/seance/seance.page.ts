@@ -9,6 +9,8 @@ import { StorageService } from 'src/app/service/storage.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
 import { ConsultationService } from 'src/app/service/consultation.service';
+import { ConferenceService } from 'src/app/service/conference.service';
+import { ParametreModalPage } from 'src/app/modal/parametre-modal/parametre-modal.page';
 
 
 
@@ -47,6 +49,7 @@ export class SeancePage {
     @Inject(LOCALE_ID) private locale: string,
     private modalCtrl: ModalController,
     private consultationService:ConsultationService,
+    private conferenceService:ConferenceService,
     private storageService:StorageService,
     private popCtrl:PopoverController,
     private route:ActivatedRoute,
@@ -62,24 +65,56 @@ export class SeancePage {
       });
   }
 
-  afficher() {
+  
 
-    
-    this.consultationService.afficherConsultation(this.role).subscribe((res:any)=>
+  afficher() {
+    this.eventSource=[];
+    this.afficherConsultations();
+    this.afficherConferences();
+  }
+
+  afficherConsultations() {
+    var events=[];
+    this.seances=[];
+    this.consultationService.afficherConsultations(this.role).subscribe((res:any)=>
     {
-      var events=[];
         this.seances=res.data.rows;
         for(let i=0;i<this.seances.length;i++)
         {
           events.push({
-            title: "Consultation : "+this.seances[i].sujet.titre,
+            title: "Consultation "+this.seances[i].sujet.titre,
             id:this.seances[i].id,
+            type:"Consultation",
             startTime: new Date(this.seances[i].periode_seance.dateDeb),
             endTime: new Date(this.seances[i].periode_seance.dateFin),
             allDay: false,
           });
         }
-        this.eventSource= events;
+        this.eventSource= this.eventSource.concat(events);
+    });
+  }
+
+
+
+  afficherConferences() {
+    var events=[];
+    this.seances=[];
+    this.conferenceService.afficherConferences(this.role).subscribe((res:any)=>
+    {
+        this.seances=res.data.rows;
+        for(let i=0;i<this.seances.length;i++)
+        {
+          events.push({
+            title: "Conference : \n"+this.seances[i].sujet.titre,
+            id:this.seances[i].id,
+            type:"Conference",
+            startTime: new Date(this.seances[i].periode_seance.dateDeb),
+            endTime: new Date(this.seances[i].periode_seance.dateFin),
+            allDay: false,
+          });
+        }
+        this.seances=[];
+        this.eventSource= this.eventSource.concat(events);
     });
   }
  
@@ -101,20 +136,34 @@ export class SeancePage {
  
   // Calendar event was clicked
   async onEventSelected(event) {
-//window.location.href="https://innovup.herokuapp.com/"+event.id;
 
-  //this.iab.create('https://innovup.herokuapp.com/'+event.id,'_blank',this.options).show();
-   
-   
 let navigationExtras: NavigationExtras = {
   queryParams: {
-    id: event.id
+    id: event.id,
+    type:event.type
   }
 };
-this.router.navigate(['../room/'],navigationExtras);
-
+this.router.navigate(['../seance-detail/'],navigationExtras);
   
-  }
+}
+
+ajouterConferencePage()
+{
+
+  this.router.navigate(['../conference/']);
+}
+
+
+async initParametres(ev)
+{
+    const popover = await this.popCtrl.create(
+      {
+        component:ParametreModalPage,
+        event:ev,
+      }
+    )
+    return await popover.present();
+}
 
  
 
