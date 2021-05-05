@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { Sujet } from 'src/app/model/sujet';
 import { StorageService } from 'src/app/service/storage.service';
 import { SujetService } from 'src/app/service/sujet.service';
 import { NgZone } from '@angular/core';
 import{SujetModalPage} from 'src/app/modal/sujet-modal/sujet-modal.page'
 import { DomSanitizer } from '@angular/platform-browser';
+import {Location} from '@angular/common';
 
 
 
@@ -26,7 +27,9 @@ export class SujetDetailPage implements OnInit {
     private storageService:StorageService,
     private ngZone: NgZone,
     private modalController:ModalController,
+    private toastController:ToastController,
     private _sanitizer: DomSanitizer,
+    private location:Location,
     private router:Router) { }
 
   ngOnInit() {
@@ -39,7 +42,7 @@ export class SujetDetailPage implements OnInit {
   async presentAlertConfirm() {
     const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
-      header: 'Confirmation de supression',
+      header: 'Confirmation de suppression',
       message: 'Voulez vous vraiment supprimer ce sujet',
       buttons: [
         {
@@ -54,6 +57,7 @@ export class SujetDetailPage implements OnInit {
           handler: () => {
             this.sujetService.supprimerSujet(this.sujet.id).subscribe(res=>
               {
+                this.presentToast("Suppression du sujet réussi")
                 this.ngZone.run(() =>
                 this.router.navigate(['./tabs/sujet']));
               })
@@ -110,6 +114,7 @@ export class SujetDetailPage implements OnInit {
         this.sujetService.afficherSujet(this.sujet.id).subscribe(res=>
           {
             this.sujet=res.data;
+            this.sujet.frais.sort((a,b) => a.duree < b.duree ? 1 : -1);
           })
       }
     });
@@ -123,5 +128,20 @@ export class SujetDetailPage implements OnInit {
       return "assets/icon/user.png"; 
   }
 
+
+  backPage()
+  {
+this.location.back();
+  }
+
+
+  async presentToast(message) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color:'dark'
+    });
+    toast.present();
+  }
 
 }

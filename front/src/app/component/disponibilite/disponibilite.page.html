@@ -15,6 +15,11 @@
           <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
         </ion-button>
       </ion-buttons>
+      <ion-buttons slot="start" *ngIf="role=='Demandeur'">
+        <ion-button (click)="backPage()">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
    

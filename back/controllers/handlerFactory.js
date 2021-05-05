@@ -29,10 +29,9 @@ exports.deleteOne = (Model) =>
 
     // Return this message if the operation is successful
     res.status(204).json({
-      status: `Removed  ${
-        Model.getTableName().charAt(0).toUpperCase() +
+      status: `Removed  ${Model.getTableName().charAt(0).toUpperCase() +
         Model.getTableName().slice(1)
-      } Successfully.`,
+        } Successfully.`,
       data: null,
     });
   });
@@ -46,10 +45,9 @@ exports.updateOne = (Model) =>
     }
 
     res.status(200).json({
-      status: `Updated ${
-        Model.getTableName().charAt(0).toUpperCase() +
+      status: `Updated ${Model.getTableName().charAt(0).toUpperCase() +
         Model.getTableName().slice(1)
-      } Successfully.`,
+        } Successfully.`,
       data: {
         row_number: result.doc,
         data: result.returnDoc,
@@ -68,10 +66,9 @@ exports.createOne = (Model) =>
 
     const doc = await Model.create(body);
     res.status(201).json({
-      status: `Created ${
-        Model.getTableName().charAt(0).toUpperCase() +
+      status: `Created ${Model.getTableName().charAt(0).toUpperCase() +
         Model.getTableName().slice(1, Model.getTableName().length - 1)
-      } Successfully.`,
+        } Successfully.`,
       data: doc,
     });
   });
@@ -91,10 +88,9 @@ exports.getOne = (Model, popOptions) =>
     }
 
     res.status(200).json({
-      status: `Fetched ${
-        Model.getTableName().charAt(0).toUpperCase() +
+      status: `Fetched ${Model.getTableName().charAt(0).toUpperCase() +
         Model.getTableName().slice(1, Model.getTableName().length - 1)
-      } Successfully.`,
+        } Successfully.`,
       data: doc,
     });
   });
@@ -127,11 +123,10 @@ exports.getAll = (Model) =>
 
     // SEND RESPONSE
     res.status(200).json({
-      status: `Fetched All ${
-        Model.getTableName().charAt(0).toUpperCase() +
+      status: `Fetched All ${Model.getTableName().charAt(0).toUpperCase() +
         Model.getTableName().slice(1)
-      } Successfully.`,
+        } Successfully.`,
       results: doc.length,
-      data: response,
+      data: doc,
     });
   });

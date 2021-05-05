@@ -11,6 +11,9 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { ConsultationService } from 'src/app/service/consultation.service';
 import { Consultation } from 'src/app/model/consultation';
 import { ParametreModalPage } from 'src/app/modal/parametre-modal/parametre-modal.page';
+import { ConferenceService } from 'src/app/service/conference.service';
+import { Seance } from 'src/app/model/seance';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-disponibilite',
@@ -38,10 +41,12 @@ export class DisponibilitePage {
     private modalCtrl: ModalController,
     private periodeService:PeriodeDisponibiliteService,
     private consultationService:ConsultationService,
+    private conferenceService:ConferenceService,
     private storageService:StorageService,
     private popCtrl:PopoverController,
     private route:ActivatedRoute,
-    private router:Router
+    private router:Router,
+    private _location: Location
   ) {}
  
   ngOnInit() {
@@ -54,6 +59,7 @@ export class DisponibilitePage {
     });
   }
 
+  
 
 
   afficher(id?) {
@@ -65,11 +71,16 @@ export class DisponibilitePage {
         for(let i=0;i<this.periodes.length;i++)
         {
           const periode=this.periodes[i];
-          this.consultationService.afficherConsultationsParDate(periode.dateDeb,periode).subscribe((res:any)=>
+          this.consultationService.afficherConsultationsParDate(periode.dateDeb,periode.dateFin).subscribe((res1:any)=>
           {
-              const tabConsultations:Consultation[]=res.data.rows;
 
-              if(tabConsultations.length==0)
+
+            this.conferenceService.afficherConferencesParDate(periode.dateDeb,periode.dateFin).subscribe((res2:any)=>
+            {
+              const tabseances:Seance[]=(res1.data.rows).concat(res2.data.rows);
+              tabseances.sort((a,b) => a.periode_seance.dateDeb > b.periode_seance.dateFin ? 1 : -1);
+
+              if(tabseances.length==0)
               {
                 events.push({
                   title: '',
@@ -79,69 +90,47 @@ export class DisponibilitePage {
                   allDay: false,
                 });
               }
-              /*else if(tabConsultations.length==1)
-              {
-                if(periode.dateDeb!=tabConsultations[0].periode_seance.dateDeb)
-                {
-                  events.push({
-                    title: '',
-                    id:periode.id,
-                    startTime: new Date(periode.dateDeb),
-                    endTime: new Date(tabConsultations[0].periode_seance.dateDeb),
-                    allDay: false,
-                  });
-                }
-
-                if(tabConsultations[0].periode_seance.dateFin!=periode.dateFin)
-                {
-                events.push({
-                  title: '',
-                  id:periode.id,
-                  startTime: new Date(tabConsultations[0].periode_seance.dateFin),
-                  endTime: new Date(periode.dateFin),
-                  allDay: false,
-                });
-              }
-              }*/
               else
               {
-
-                if(periode.dateDeb!=tabConsultations[0].periode_seance.dateDeb)
+                if(periode.dateDeb!=tabseances[0].periode_seance.dateDeb)
                 {
                   events.push({
                     title: '',
                     id:periode.id,
                     startTime: new Date(periode.dateDeb),
-                    endTime: new Date(tabConsultations[0].periode_seance.dateDeb),
+                    endTime: new Date(tabseances[0].periode_seance.dateDeb),
                     allDay: false,
                   });
                 }
-                for(let g=0;g<tabConsultations.length-1;g++)
+                for(let g=0;g<tabseances.length-1;g++)
                 {
-                   if(tabConsultations[g].periode_seance.dateFin!=tabConsultations[g+1].periode_seance.dateDeb)
+                   if(tabseances[g].periode_seance.dateFin!=tabseances[g+1].periode_seance.dateDeb)
                   {
                     events.push({
                       title: '',
                       id:periode.id,
-                      startTime: new Date(tabConsultations[g].periode_seance.dateFin),
-                      endTime: new Date(tabConsultations[g+1].periode_seance.dateDeb),
+                      startTime: new Date(tabseances[g].periode_seance.dateFin),
+                      endTime: new Date(tabseances[g+1].periode_seance.dateDeb),
                       allDay: false,
                     });
                   }
                 }  
 
-                if(tabConsultations[tabConsultations.length-1].periode_seance.dateFin!=periode.dateFin)
+                if(tabseances[tabseances.length-1].periode_seance.dateFin!=periode.dateFin)
                 {
                 events.push({
                   title: '',
                   id:periode.id,
-                  startTime: new Date(tabConsultations[tabConsultations.length-1].periode_seance.dateFin),
+                  startTime: new Date(tabseances[tabseances.length-1].periode_seance.dateFin),
                   endTime: new Date(periode.dateFin),
                   allDay: false,
                 });
               }
               }
               this.eventSource=this.eventSource.concat(events);
+            });
+
+
           });
 
         }
@@ -236,7 +225,7 @@ export class DisponibilitePage {
         
         }
       };
-      this.router.navigate(['../../paiement'],navigationExtras);
+      this.router.navigate(['paiement'],navigationExtras);
     }
   });
   }
@@ -302,4 +291,13 @@ export class DisponibilitePage {
       return await popover.present();
   }
   
+
+  backPage()
+  {
+    this._location.back();
+
+  }
+ 
+
 }
+

@@ -1,5 +1,5 @@
 export enum StatusSeance {
-    EnAttente="EnAttente",
+    NonCommence="NonCommence",
     EnCours="EnCours",
     Cloture="Cloture"
   }

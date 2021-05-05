@@ -13,38 +13,41 @@
 </ion-toolbar>
  
 <ion-content>
+  <ion-list>
   <ion-item>
-    <ion-label position="stacked">Titre</ion-label>
-    <ion-input type="text" [(ngModel)]="sujet.titre"></ion-input>
+    <ion-label position="stacked"><b>Titre</b></ion-label>
+    <ion-input type="text" [(ngModel)]="sujet.titre" placeholder="Titre du sujet"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label position="stacked">Description</ion-label>
-    <ion-input type="text" [(ngModel)]="sujet.description"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Prix</ion-label>
- 
-    <ion-item>
-      <ion-checkbox color="primary"  [(ngModel)]="frais15check" ></ion-checkbox>
-      <ion-label>15 min :</ion-label>
-      <ion-input name="_15min" type="number" [(ngModel)]="frais15.prix"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox color="primary" [(ngModel)]="frais30check"></ion-checkbox>
-      <ion-label>30 min :</ion-label>
-      <ion-input name="_30min" type="number"  [(ngModel)]="frais30.prix"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox color="primary" [(ngModel)]="frais45check" ></ion-checkbox>
-      <ion-label>45 min : </ion-label>
-      <ion-input name="_45min" type="number"  [(ngModel)]="frais45.prix"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox color="primary" [(ngModel)]="frais60check"></ion-checkbox>
-      <ion-label>60 min :</ion-label>
-      <ion-input name="_60min" type="number"  [(ngModel)]="frais60.prix"></ion-input>
-    </ion-item>
-  </ion-item>
- 
+    <ion-label position="stacked"><b>Description</b></ion-label>
+    <ion-textarea rows="3" type="text" [(ngModel)]="sujet.description" placeholder="Description du sujet"></ion-textarea>
 
+   
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked"><b>Prix</b></ion-label>
+ 
+    <ion-item lines="none"> 
+      <ion-checkbox color="primary"  [(ngModel)]="frais15check" ></ion-checkbox>
+      <ion-label>15 min:</ion-label>
+      <ion-input name="_15min" type="number" [(ngModel)]="frais15.prix" placeholder="Prix du 15 min"></ion-input>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-checkbox color="primary" [(ngModel)]="frais30check"></ion-checkbox>
+      <ion-label>30 min:</ion-label>
+      <ion-input name="_30min" type="number"  [(ngModel)]="frais30.prix" placeholder="Prix du 30 min"></ion-input>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-checkbox color="primary" [(ngModel)]="frais45check" ></ion-checkbox>
+      <ion-label>45 min: </ion-label>
+      <ion-input name="_45min" type="number"  [(ngModel)]="frais45.prix" placeholder="Prix du 45 min"></ion-input>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-checkbox color="primary" [(ngModel)]="frais60check"></ion-checkbox>
+      <ion-label>60 min:</ion-label>
+      <ion-input name="_60min" type="number"  [(ngModel)]="frais60.prix" placeholder="Prix du 60 min"></ion-input>
+    </ion-item>
+  </ion-item>
+ 
+</ion-list>
 </ion-content>

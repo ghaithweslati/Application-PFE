@@ -48,7 +48,8 @@ vidUrl:SafeResourceUrl;
     this.route.queryParams.subscribe(params => {
       if (params) {
      //this.vidUrl="https://ghaith-weslati.herokuapp.com/"+params.id
-      this.vidUrl=this.domSantizer.bypassSecurityTrustResourceUrl("https://ghaith-weslati.herokuapp.com/"+params.id+"?sujet="+params.sujet/*+"&duree"+params.duree+"*/+"&role="+params.role+"&nom="+params.nom)
+     console.log("https://ghaith-weslati.herokuapp.com/"+params.id+"?sujet="+params.sujet+"&id"+params.id+"&role="+params.role+"&nom="+params.nom)
+      this.vidUrl=this.domSantizer.bypassSecurityTrustResourceUrl("https://ghaith-weslati.herokuapp.com/"+params.id+"?sujet="+params.sujet+"&id="+params.id+"&role="+params.role+"&nom="+params.nom)
 
       }
     });

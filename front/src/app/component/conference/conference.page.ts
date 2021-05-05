@@ -16,7 +16,7 @@ import { SujetService } from 'src/app/service/sujet.service';
 })
 export class ConferencePage implements OnInit {
   
-  heureDeb:string;
+  heureDeb:string ;
   heureFin:string;
   date:string;
   conference:Conference=new Conference();
@@ -32,6 +32,11 @@ export class ConferencePage implements OnInit {
 
   ngOnInit() {
     this.afficherSujets();
+
+    this.date = this.toJSONLocal(new Date()).slice(0, 10);
+    this.heureDeb = this.toJSONLocal(new Date()).slice(11,16)
+    this.heureFin = this.toJSONLocal(new Date()).slice(11,16)
+ 
   }
 
   ajouterConference()
@@ -42,7 +47,7 @@ export class ConferencePage implements OnInit {
       this.conference.type=TypeConference.Payant;
     else
       this.conference.type=TypeConference.Gratuit;
-    this.conference.status=StatusSeance.EnAttente;
+    this.conference.status=StatusSeance.NonCommence;
     this.periodeSeanceServ.ajouterPeriodeSeance(this.conference.periode_seance).subscribe((res:any)=>
     {
           var conf=Object.assign(this.conference,{'sujetId':this.conference.sujet.id},{'periodeSeanceId':res.data.id});
@@ -72,5 +77,11 @@ export class ConferencePage implements OnInit {
       });
   }
 
+
+  toJSONLocal (date) {
+    var local = new Date(date);
+    local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return local.toJSON();
+}
 
 }

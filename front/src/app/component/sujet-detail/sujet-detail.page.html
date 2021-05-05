@@ -2,13 +2,18 @@
   <ion-toolbar color="primary">
     <ion-title>{{sujet.titre}}</ion-title>
     <ion-buttons slot="start" >
-      <ion-back-button></ion-back-button>
+      <ion-button (click)="backPage()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-buttons *ngIf="role=='Expert'" slot="end"  (click)="initSujet()">
-      <ion-icon name="create" ></ion-icon>
-    </ion-buttons>
-    <ion-buttons *ngIf="role=='Expert'" slot="end"  (click)="presentAlertConfirm()">
-      <ion-icon name="trash" ></ion-icon>
+
+    <ion-buttons *ngIf="role=='Expert'" slot="end" >
+      <ion-button  (click)="initSujet()">
+        <ion-icon name="create" slot="icon-only" ></ion-icon>
+      </ion-button>
+    <ion-button  (click)="presentAlertConfirm()">
+      <ion-icon name="trash" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -53,14 +58,22 @@
       Frais
     </ion-list-header>
 
-    <div *ngFor="let fr of sujet.frais">
-    <ion-item>
-      <ion-label>
+    
+      
+  <ion-grid>
+    <ion-row no-padding>
+      <ion-col *ngFor="let fr of sujet.frais" size-lg="4" size-md="5" size-sm="4" size="4">
+        <ion-item>
+        <ion-label>
         <h3>{{fr.duree}} min</h3>
         <p>{{fr.prix}} DT</p>
       </ion-label>
     </ion-item>
-    </div>
+      </ion-col>
+    </ion-row>
+</ion-grid>
+
+
 
     <ion-item  *ngIf="sujet.frais.length==0">
       <ion-label>
@@ -73,6 +86,6 @@
 </ion-content>
 <ion-footer class="bottom" *ngIf="role=='Demandeur'"> 
   <ion-toolbar>
-    <ion-button (click)="plannifierSeance()" expand="block">Plannifier une séance</ion-button>
+    <ion-button  id="bouton" (click)="plannifierSeance()" expand="block">Réserver une consultation</ion-button>
   </ion-toolbar>
 </ion-footer>

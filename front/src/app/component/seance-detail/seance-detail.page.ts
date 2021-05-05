@@ -12,6 +12,7 @@ import { ConsultationService } from 'src/app/service/consultation.service';
 import { ParticipationService } from 'src/app/service/participation.service';
 import { StorageService } from 'src/app/service/storage.service';
 import { SeanceModalPage } from 'src/app/modal/seance-modal/seance-modal.page';
+import { TypeConference } from 'src/app/Enum/TypeConference';
 
 @Component({
   selector: 'app-seance-detail',
@@ -32,7 +33,8 @@ export class SeanceDetailPage implements OnInit {
     private router:Router,
     private modalCtrl:ModalController,
     private storageService:StorageService,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    
     ) { }
 
     
@@ -76,6 +78,7 @@ export class SeanceDetailPage implements OnInit {
 
         if(localStorage.getItem("status"))
         {
+          localStorage.removeItem("status");
           if(this.utilisateurConnecte.role=="Expert")
           {
             this.seance.status=StatusSeance.Cloture;
@@ -88,6 +91,7 @@ export class SeanceDetailPage implements OnInit {
               if(this.consultation.note==undefined )
                 this.openSeanceModal();
           }
+  
         }
       })
   }
@@ -112,6 +116,7 @@ export class SeanceDetailPage implements OnInit {
             this.conferenceService.modifierConference(this.conference,this.seance.id).subscribe();
           
         }
+        localStorage.removeItem("status");
         
       }
   }
@@ -131,7 +136,7 @@ export class SeanceDetailPage implements OnInit {
 
         if(this.utilisateurConnecte.role=="Demandeur")
         {
-          this.participationService.ajouterParticipation({"demandeurId":this.utilisateurConnecte.id,"conferenceId":this.seance.id})
+          this.participationService.ajouterParticipation({"demandeurId":this.utilisateurConnecte.id,"conferenceId":this.seance.id}).subscribe();
         }
       }
     var t1 = new Date(this.seance.periode_seance.dateFin);
@@ -156,23 +161,28 @@ export class SeanceDetailPage implements OnInit {
 
   verifierDate()
   {
+    return true;
+   /*
     var t2 = new Date();
     var t1 = new Date(this.seance.periode_seance.dateDeb);
     var dif = t1.getTime() - t2.getTime();
-    var duree = dif / 1000 /60 ;
+    var duree = dif / 1000 /60 ;*/
 
-    return (this.seance.status!=StatusSeance.Cloture)&&((duree<=30&&duree>=-30)&&new Date()<=new Date(this.seance.periode_seance.dateFin));
+    return (this.seance.status!=StatusSeance.Cloture)/*&&((duree<=30&&duree>=-30)&&new Date()<=new Date(this.seance.periode_seance.dateFin))*/;
   }
 
   sommeFrais()
   {
+
     var t1 = new Date(this.seance.periode_seance.dateFin);
     var t2 = new Date(this.seance.periode_seance.dateDeb);
     var dif = t1.getTime() - t2.getTime();
     var minute = dif / 1000 / 60 ;
     var frais = this.seance.sujet.frais;
+    frais.sort((a,b) => a.duree < b.duree ? 1 : -1);
     var prix =0;
     var i = 0;
+   
 
     while(i<frais.length)
     {
@@ -184,7 +194,7 @@ export class SeanceDetailPage implements OnInit {
       else
         i++;
     }
-    return prix+" DT";
+    return prix;
 
   }
 
@@ -210,4 +220,9 @@ export class SeanceDetailPage implements OnInit {
     });
   }   
 
+
+  back()
+  {
+    this.router.navigate(['../tabs/seance']);
+  }
 }

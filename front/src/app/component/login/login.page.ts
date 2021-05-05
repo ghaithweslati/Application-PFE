@@ -23,13 +23,14 @@ export class LoginPage implements OnInit {
       const toast = await this.toastController.create({
         message: message,
         duration: 2000,
+        color:'dark'
+
       });
       toast.present();
     }
    
 
   ngOnInit() {
-    localStorage.removeItem("status");
   }
 
   login()

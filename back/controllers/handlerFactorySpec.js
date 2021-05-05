@@ -351,6 +351,7 @@ const GetOneSpec = async (Model, req) => {
 
 const GetAllSpec = async (Model, limit, offset, req) => {
   let query;
+  let query2;
   const customerId = req.params.customerId;
   const dressingId = req.params.dressingId;
   const categoryId = req.params.categoryId;
@@ -500,9 +501,6 @@ const GetAllSpec = async (Model, limit, offset, req) => {
       break;
     case models_names.consultations:
       userId = req.user.id;
-      const dateDeb = req.params.dateDeb;
-      const dateFin = req.params.dateFin;
-
       if (role == "Demandeur") {
         query = Model.findAndCountAll({
           where:
@@ -538,6 +536,30 @@ const GetAllSpec = async (Model, limit, offset, req) => {
             },
             {
               model: Demandeur,
+            }
+          ],
+        });
+      }
+      else if (role == "Statistique") {
+        query = Model.findAndCountAll({
+          attributes: [],
+          include: [
+            {
+              model: Sujet,
+              attributes: ["id", "titre"],
+              where:
+              {
+                expertId: userId,
+              },
+              include: [
+                {
+                  model: Frais,
+                  attributes: ["duree", "prix"],
+                }
+              ]
+            },
+            {
+              model: PeriodeSeance,
             }
           ],
         });
@@ -584,30 +606,65 @@ const GetAllSpec = async (Model, limit, offset, req) => {
           ],
         });
 
-        /*      query2 = Model.findAndCountAll({
-                include: [
-                  {
-                    model: PeriodeSeance,
-                    where:
-                    {
-                      dateFin: {
-                        [Op.gte]: new Date(),
-                      },
-                    },
-                  },
-                  {
-                    model: Sujet
-                  },
-                  {
-                    model: Participation,
-                    where: { demandeurId: userId },
-                    attributes: []
-                  },
-                ],
-              });
-              query.data.rows.concat(query2.data.rows)*/
+        /*     query2 = Model.findAndCountAll({
+               include: [
+                 {
+                   model: PeriodeSeance,
+                   where:
+                   {
+                     dateFin: {
+                       [Op.lte]: new Date(),
+                     },
+                   },
+                 },
+                 {
+                   model: Sujet
+                 },
+                 {
+                   model: Demandeur,
+                   where: { id: userId },
+                   attributes: []
+                 },
+               ],
+             });
+     */
+
+
+
       }
-      else {
+      else if (role == "Statistique") {
+        query = Model.findAndCountAll({
+          attributes: [],
+          where:
+          {
+            type: "Payant"
+          },
+          include: [
+            {
+              model: Sujet,
+              attributes: ["id", "titre"],
+              where:
+              {
+                expertId: userId,
+              },
+              include: [
+                {
+                  model: Frais,
+                  attributes: ["duree", "prix"],
+                }
+              ]
+            },
+            {
+              model: Demandeur,
+              attributes: ["id"],
+            },
+            {
+              model: PeriodeSeance,
+            }
+          ],
+        });
+      }
+      else if (role == "Expert") {
         query = Model.findAndCountAll({
           include: [
             {
@@ -620,6 +677,26 @@ const GetAllSpec = async (Model, limit, offset, req) => {
             {
               model: PeriodeSeance,
             }
+          ],
+        });
+      }
+      else {
+        query = Model.findAndCountAll({
+
+          include: [
+            {
+              model: PeriodeSeance,
+              where:
+              {
+                dateDeb: {
+                  [Op.gte]: dateDeb,
+                },
+                dateFin: {
+                  [Op.lte]: dateFin,
+                },
+              },
+              order: [["dateDeb", "ASC"]],
+            },
           ],
         });
       }

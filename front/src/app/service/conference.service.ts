@@ -47,6 +47,15 @@ export class ConferenceService {
   }
 
 
+  afficherConferencesParDate(dateDeb,dateFin): Observable<any> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+      return this.http.get(`${this.baseUrl}/${dateDeb}/${dateFin}`,{ headers: reqHeader });
+  }
+
+
 
  /* afficherConsultation(role): Observable<any> {
     var reqHeader = new HttpHeaders({ 

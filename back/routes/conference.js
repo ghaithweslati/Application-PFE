@@ -57,4 +57,15 @@ router.put(
   conferenceController.updateConference
 );
 
+
+
+
+router.get(
+  "/:dateDeb/:dateFin",
+  // isAuth,
+  passport.authenticate("jwt", { session: false }),
+  conferenceController.getAllConference
+);
+
+
 module.exports = router;

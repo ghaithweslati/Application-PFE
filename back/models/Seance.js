@@ -24,7 +24,7 @@ class Seance {
       primaryKey: true
     };
     this.dureeEffectif = { type: Sequelize.INTEGER, allowNull: true };
-    this.status = { type: Sequelize.ENUM, values: ['EnAttente', 'EnCours', 'Cloture'] };
+    this.status = { type: Sequelize.ENUM, values: ['NonCommence', 'EnCours', 'Cloture'] };
   }
 
 }

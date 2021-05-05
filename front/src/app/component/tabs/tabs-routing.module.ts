@@ -28,6 +28,10 @@ const routes: Routes = [
         loadChildren: () => import('../seance/seance.module').then(m => m.SeancePageModule)
       },
       {
+        path: 'gain',
+        loadChildren: () => import('../gain/gain.module').then(m => m.GainPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/seance',
         pathMatch: 'full'
