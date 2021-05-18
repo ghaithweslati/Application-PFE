@@ -66,7 +66,7 @@
         <ion-item>
         <ion-label>
         <h3>{{fr.duree}} min</h3>
-        <p>{{fr.prix}} DT</p>
+        <p>{{fr.prix}} €</p>
       </ion-label>
     </ion-item>
       </ion-col>
@@ -86,6 +86,6 @@
 </ion-content>
 <ion-footer class="bottom" *ngIf="role=='Demandeur'"> 
   <ion-toolbar>
-    <ion-button  id="bouton" (click)="plannifierSeance()" expand="block">Réserver une consultation</ion-button>
+    <ion-button  id="bouton" (click)="reserverConsultation()" expand="block">Réserver une consultation</ion-button>
   </ion-toolbar>
 </ion-footer>

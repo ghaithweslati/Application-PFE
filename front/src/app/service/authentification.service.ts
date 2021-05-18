@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthentificationService {
 
-  private baseUrl = 'https://ghaith-weslati.herokuapp.com/auth';
+  public baseUrl = 'https://ghaith-weslati.herokuapp.com/auth';
 
 
   constructor(private http: HttpClient) { 

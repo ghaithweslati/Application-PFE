@@ -16,5 +16,8 @@ module.exports = {
   consultations: "consultations",
   conferences: "conferences",
   experts: "experts",
+  demandeurs: "demandeurs",
+  administrateurs: "administrateurs",
+
 
 };

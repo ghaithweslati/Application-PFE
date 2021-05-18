@@ -1,4 +1,5 @@
 import { EtatUtilisateur } from "../Enum/EtatUtilisateur";
+import { Compte } from "./compte"
 
 export class Utilisateur {
     id: number;
@@ -10,4 +11,5 @@ export class Utilisateur {
       salt: string;
       photo: Text;
       etat:EtatUtilisateur;
+      compte:Compte=new Compte();
 }

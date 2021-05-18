@@ -1,0 +1,59 @@
+<ion-toolbar color="primary">
+  <ion-buttons slot="start">
+    <ion-button (click)="backPage()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-buttons slot="end">
+    <ion-button (click)="payer()">
+      Payer
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+ 
+<ion-content>
+  <ion-list>
+    
+    <ion-list-header>
+      Période
+    </ion-list-header>
+    <ion-item>
+      <ion-label  position="stacked">Date</ion-label>
+      <ion-datetime  [(ngModel)]="date"></ion-datetime>
+    </ion-item>
+  
+    <ion-row>
+      <ion-col>
+    <ion-item>
+      <ion-label position="stacked">Heure début</ion-label>
+      <ion-datetime name="heureDeb" (ionChange)="sommeFrais()" display-format="h:mm A"  [(ngModel)]="heureDeb"  picker-format="h:mm A" minuteValues="0,15,30,45"></ion-datetime>
+    </ion-item>
+  </ion-col>
+  <ion-col>
+    <ion-item>
+      <ion-label position="stacked">Heure Fin</ion-label>
+      <ion-datetime name="heureFin" display-format="h:mm A" (ionChange)="sommeFrais()" [(ngModel)]="heureFin"  picker-format="h:mm A" minuteValues="0,15,30,45"></ion-datetime>
+    </ion-item>
+  </ion-col>
+  <ion-item lines="none">
+    <ion-text color="dark">
+    <h6><b>Durée: </b> {{duree}} minutes</h6>
+    <h6><b>Frais: </b> {{prix}} €</h6>
+  </ion-text>
+  </ion-item>
+  
+  </ion-row>
+  <ion-list-header>
+    Paiement
+  </ion-list-header>
+  
+  <form  (ngSubmit)="payer()" >
+    <ngx-stripe-card
+      [options]="cardOptions"
+      [elementsOptions]="elementsOptions"
+    ></ngx-stripe-card>
+  </form>
+
+</ion-list>
+ 
+</ion-content>

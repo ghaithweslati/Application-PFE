@@ -21,7 +21,7 @@ router.get(
 router.get(
   "/:sujetId",
   // isAuth
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   sujetController.getSujet
 );
 

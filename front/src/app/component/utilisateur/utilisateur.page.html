@@ -19,12 +19,9 @@
     <ion-segment-button value="expert">
       <ion-label>Experts</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="administrateur">
-      <ion-label>Administrateurs</ion-label>
-    </ion-segment-button>
   </ion-segment>
-<ion-list>
-  <ion-item *ngFor="let utilisateur of utilisateurs" >
+<ion-list >
+  <ion-item *ngFor="let utilisateur of utilisateurs" (click)="afficherDetail(utilisateur.id)">
     <ion-avatar slot="start">
       <img [src]="base64image(utilisateur.photo)">
     </ion-avatar>

@@ -1,9 +1,11 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
+
 import { Frais } from 'src/app/model/frais';
 import { Sujet } from 'src/app/model/sujet';
 import { FraisService } from 'src/app/service/frais.service';
+import { StorageService } from 'src/app/service/storage.service';
 import { SujetService } from 'src/app/service/sujet.service';
 
 
@@ -24,14 +26,22 @@ export class SujetModalPage implements OnInit {
   frais45check;
   frais60check;
   sujetModifie;
+  listeSujets:Sujet[]=[];
   constructor(private modalCtrl: ModalController,
     private sujetService:SujetService,
     private fraisService:FraisService, 
     private toastController:ToastController,
+    private storageService:StorageService,
     private loadingController:LoadingController,
     ) { }
 
   ngOnInit() {
+    const id = this.storageService.afficherUtilisateurCourant().id;
+    const role = this.storageService.afficherUtilisateurCourant().role;
+    this.sujetService.afficherTousSujets(role,id).subscribe((res:any)=>
+    {
+      this.listeSujets=res.data.rows;
+    });
     this.frais15.duree=15;
     this.frais30.duree=30;
     this.frais45.duree=45;
@@ -79,6 +89,10 @@ export class SujetModalPage implements OnInit {
         if((test||this.sujet.titre==undefined||this.sujet.titre==""))
         {
           this.presentToast("Vous avez saisie des données invalides!")
+        }
+        else if(this.exite())
+        {
+          this.presentToast("Vous avez déjà un sujet portant ce même titre!")
         }
         else
         {
@@ -162,6 +176,25 @@ export class SujetModalPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  exite()
+  {
+    let i=0;
+  
+    if(this.sujetModifie)
+    {
+      while(i<this.listeSujets.length&&this.listeSujets[i].titre!=this.sujet.titre)
+      i++;
+      if(i<this.listeSujets.length)
+        return this.listeSujets[i].id!=this.sujet.id
+      
+    }
+    else
+    {
+    while(i<this.listeSujets.length&&this.listeSujets[i].titre!=this.sujet.titre)
+      i++;
+    return i<this.listeSujets.length;
+    }
+  }
   /*
   checkFrais(event,frais)
   {

@@ -51,7 +51,7 @@
     </ng-container>
 
     <ng-container  *ngIf="segment=='expert'">
-      <ion-item *ngFor="let expert of experts" >
+      <ion-item *ngFor="let expert of experts" (click)="expertDetail(expert.id)">
         <ion-avatar slot="start">
           <img [src]="base64image(expert.photo)">
         </ion-avatar>

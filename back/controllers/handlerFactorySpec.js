@@ -10,7 +10,15 @@ const PeriodeSeance = require("../models/PeriodeSeance");
 const Sujet = require("../models/Sujet");
 const Frais = require("../models/Frais");
 const Participation = require("../models/Participation");
+const Consultation = require("../models/Consultation");
+const Domaine = require("../models/Domaine");
+const Compte = require("../models/Compte");
+const { consultations } = require("../constant/models_names");
+const { use } = require("passport");
+const { hash } = require("bcryptjs");
 const Op = Sequelize.Op;
+const utils = require("../utils/utils");
+
 
 const DeleteSpec = async (Model, req) => {
   let doc;
@@ -67,11 +75,64 @@ const DeleteSpec = async (Model, req) => {
 
 const UpdateSpec = async (Model, req) => {
   let doc;
-  let userId;
   let dressingId;
   let productId;
   let returnDoc;
+  let userId;
+  var salt;
+  var hash;
+
+
   switch (Model.getTableName()) {
+    case models_names.experts:
+      var user = req.body;
+      if (req.body.password != undefined) {
+        const saltHash = utils.genPassword(req.body.password);
+        salt = saltHash.salt;
+        hash = saltHash.hash;
+        user.salt = salt,
+          user.hash = hash;
+      }
+      doc = await Model.update(user, {
+        where: { id: req.params.id },
+      });
+      returnDoc = await Model.findOne({
+        where: { id: req.params.id },
+      });
+      break;
+
+    case models_names.administrateurs:
+      var user = req.body;
+      if (req.body.password != undefined) {
+        const saltHash = utils.genPassword(req.body.password);
+        salt = saltHash.salt;
+        hash = saltHash.hash;
+        user.salt = salt,
+          user.hash = hash;
+      }
+      doc = await Model.update(user, {
+        where: { id: req.params.id },
+      });
+      returnDoc = await Model.findOne({
+        where: { id: req.params.id },
+      });
+      break;
+    case models_names.demandeurs:
+      var user = req.body;
+      if (req.body.password != undefined) {
+        const saltHash = utils.genPassword(req.body.password);
+        salt = saltHash.salt;
+        hash = saltHash.hash;
+        user.salt = salt,
+          user.hash = hash;
+      }
+      doc = await Model.update(user, {
+        where: { id: req.params.id },
+      });
+      returnDoc = await Model.findOne({
+        where: { id: req.params.id },
+      });
+      break;
     case models_names.customers:
       userId = req.user.id;
       doc = await Model.update(req.body, {
@@ -212,7 +273,45 @@ const GetOneSpec = async (Model, req) => {
           },
           {
             model: Expert,
-            attributes: ["id", "nom", "prenom", "photo", "specialite"]
+            attributes: ["id", "nom", "prenom", "photo", "specialite", "etat"],
+            include: [
+              {
+                model: Compte,
+                attributes: ["id", "code", "cle"]
+              },]
+          },
+        ],
+      });
+      break;
+    case models_names.experts:
+      expertId = req.params.id;
+      query = Model.findOne({
+        where: { id: expertId },
+        include: [
+          {
+            model: Sujet,
+            attributes: ["id", "titre", "description"],
+            include: [
+              {
+                model: Consultation,
+                attributes: ["id", "note"]
+              },]
+          },
+          {
+            model: Domaine
+          }
+        ],
+      });
+      break;
+    case models_names.administrateurs:
+      expertId = req.params.id;
+      query = Model.findOne({
+        where: { id: expertId },
+        attributes: [],
+        include: [
+          {
+            model: Compte,
+            attributes: ["id", "cle"],
           }
         ],
       });

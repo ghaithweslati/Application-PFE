@@ -26,6 +26,7 @@ const PeriodeDisponibilite = require("./models/PeriodeDisponibilite");
 const PeriodeSeance = require("./models/PeriodeSeance");
 const Sujet = require("./models/Sujet");
 const Frais = require("./models/Frais");
+const Compte = require("./models/Compte");
 //const Seance = require("./models/Seance");
 const Domaine = require("./models/Domaine");
 const Conference = require("./models/Conference");
@@ -101,6 +102,10 @@ const administrateurRoutes = require("./routes/administrateur");
 const consultationRoutes = require("./routes/consultation");
 const conferenceRoutes = require("./routes/conference");
 const participationRoutes = require("./routes/participation");
+const compteRoutes = require("./routes/compte");
+const paiementRoutes = require("./routes/paiement");
+
+
 
 
 /*const categoryRoutes = require("./routes/category");
@@ -179,6 +184,10 @@ app.use("/administrateur", administrateurRoutes);
 app.use("/consultation", consultationRoutes);
 app.use("/conference", conferenceRoutes);
 app.use("/participation", participationRoutes);
+app.use("/compte", compteRoutes);
+app.use("/paiement", paiementRoutes);
+
+
 
 
 /*
@@ -244,6 +253,16 @@ Conference.belongsTo(Sujet);
 Sujet.hasOne(Conference);
 
 
+Demandeur.belongsTo(Compte);
+Compte.hasOne(Demandeur);
+
+
+Expert.belongsTo(Compte);
+Compte.hasOne(Expert);
+
+Administrateur.belongsTo(Compte);
+Compte.hasOne(Administrateur);
+
 Demandeur.belongsToMany(Conference, { through: Participation })
 Conference.belongsToMany(Demandeur, { through: Participation })
 
@@ -255,7 +274,8 @@ const { ExpressPeerServer } = require('peer')
 const peerServer = ExpressPeerServer(server, {
   debug: true,
 })
-const { v4: uuidv4 } = require('uuid')
+const { v4: uuidv4 } = require('uuid');
+const Utilisateur = require("./models/Utilisateur");
 
 app.use('/peerjs', peerServer)
 app.use(express.static('public'))

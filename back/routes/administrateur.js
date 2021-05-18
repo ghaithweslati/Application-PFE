@@ -15,6 +15,15 @@ router.get(
   administrateurController.getAllAdministrateur
 );
 
+// GET /utilisateur/utilisateurs/:page
+router.get(
+  "/:id",
+  // isAuth,
+  //passport.authenticate("jwt", { session: false }),
+  administrateurController.getOneAdminstrateur
+);
+
+
 router.put(
   "/:id",
   // isAuth

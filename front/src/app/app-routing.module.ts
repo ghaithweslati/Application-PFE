@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'paiement',
-    loadChildren: () => import('./paiement/paiement.module').then( m => m.PaiementPageModule)
+    loadChildren: () => import('./component/paiement/paiement.module').then( m => m.PaiementPageModule)
   },
   {
     path: 'login',
@@ -61,6 +61,14 @@ const routes: Routes = [
   {
     path: 'compte',
     loadChildren: () => import('./component/compte/compte.module').then( m => m.ComptePageModule)
+  },
+  {
+    path: 'expert',
+    loadChildren: () => import('./component/expert/expert.module').then( m => m.ExpertPageModule)
+  },
+  {
+    path: 'mdp',
+    loadChildren: () => import('./component/mdp/mdp.module').then( m => m.MdpPageModule)
   },
 
 ];

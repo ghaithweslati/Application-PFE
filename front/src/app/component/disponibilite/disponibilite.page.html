@@ -8,9 +8,6 @@
         Disponibilité
       </ion-title>
       <ion-buttons slot="end" *ngIf="role=='Expert'">
-        <ion-button (click)="openCalModal()">
-          <ion-icon name="add" slot="icon-only"></ion-icon>
-        </ion-button>
         <ion-button (click)="initParametres($event)">
           <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
         </ion-button>
@@ -70,6 +67,12 @@
     >
     </calendar>
    
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed"  *ngIf="role=='Expert'">
+      <ion-fab-button  (click)="openCalModal()">
+        <ion-icon name="create"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
   </ion-content>
 
 

@@ -1,6 +1,6 @@
 import { CalendarComponent } from 'ionic2-calendar';
 import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
-import { AlertController, ModalController, PopoverController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { CalModalPage } from '../../modal/cal-modal/cal-modal.page';
 import { PeriodeDisponibiliteService } from 'src/app/service/periode_disponibilite.service';
@@ -46,6 +46,7 @@ export class DisponibilitePage {
     private popCtrl:PopoverController,
     private route:ActivatedRoute,
     private router:Router,
+    private actionSheetController:ActionSheetController,
     private _location: Location
   ) {}
  
@@ -66,20 +67,18 @@ export class DisponibilitePage {
     this.eventSource=[];
     this.periodeService.afficherPeriodesDisponibilites(id).subscribe((res:any)=>
     {
-      var events=[];
         this.periodes=res.data.rows;
         for(let i=0;i<this.periodes.length;i++)
         {
           const periode=this.periodes[i];
           this.consultationService.afficherConsultationsParDate(periode.dateDeb,periode.dateFin).subscribe((res1:any)=>
-          {
-
-
+          {          
             this.conferenceService.afficherConferencesParDate(periode.dateDeb,periode.dateFin).subscribe((res2:any)=>
             {
               const tabseances:Seance[]=(res1.data.rows).concat(res2.data.rows);
-              tabseances.sort((a,b) => a.periode_seance.dateDeb > b.periode_seance.dateFin ? 1 : -1);
 
+              tabseances.sort((a,b) => a.periode_seance.dateDeb > b.periode_seance.dateFin ? 1 : -1);
+              var events=[];
               if(tabseances.length==0)
               {
                 events.push({
@@ -92,6 +91,7 @@ export class DisponibilitePage {
               }
               else
               {
+
                 if(periode.dateDeb!=tabseances[0].periode_seance.dateDeb)
                 {
                   events.push({
@@ -181,32 +181,45 @@ export class DisponibilitePage {
 
     if(this.role=="Expert")
     {
-    const popover = await this.popCtrl.create(
-      {
-        component:PopoverPage,
-
-      }
-    )
-
-    popover.onDidDismiss().then((data:any)=>
-    {
-      const action=data.data.action;
-      if(action=="supprimer")
-      {
-        this.presentAlertConfirm(event.id)
-      }
-      else if(action=="afficher")
-      {
-        this.afficherPeriode(event);
-      }
-      else if(action=="modifier")
-      {
-        
-      }
+      const actionSheet = await this.actionSheetController.create({
+        header: 'Gestion du disponibilité',
+        cssClass: 'my-custom-class',
+        buttons: [
+          {
+            text: 'Afficher',
+            role: 'create',
+            icon: 'clipboard',
+            handler: () => {
+              this.afficherPeriode(event);
+            }
+          },
+          {
+          text: 'Supprimer',
+          role: 'destructive',
+          icon: 'trash',
+          handler: () => {
+            this.presentAlertConfirm(event.id)
+          }
+        }, {
+          text: 'Modifier',
+          icon: 'create',
+          handler: () => {
+            this.alertModifier(event);
+          }
+        },
+        {
+          text: 'Annuler',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }]
+      });
+      await actionSheet.present();
     }
-    )
-    return await popover.present();
-  }
+
+
   else
   {
    const date = this.toJSONLocal(event.startTime).slice(0, 10);
@@ -269,6 +282,28 @@ export class DisponibilitePage {
     const modal = await this.modalCtrl.create({
       component: CalModalPage,
       cssClass: 'cal-modal',
+      componentProps: { 
+        listeDisponibilite: this.periodes,
+      },
+      backdropDismiss: false
+    });
+   
+    await modal.present();
+   
+    modal.onDidDismiss().then((result) => {
+        this.afficher();
+    });
+  }
+ 
+
+  async alertModifier(event) {
+    const modal = await this.modalCtrl.create({
+      component: CalModalPage,
+      cssClass: 'cal-modal',
+      componentProps: { 
+        listeDisponibilite: this.periodes,
+        event:event
+      },
       backdropDismiss: false
     });
    

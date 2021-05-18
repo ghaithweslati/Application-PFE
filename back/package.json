@@ -40,6 +40,7 @@
     "peer": "^0.5.3",
     "sequelize": "^5.21.1",
     "socket.io": "^2.4.1",
+    "stripe": "^8.148.0",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4",
     "uuid": "^8.3.0"

@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{expert.prenom}} {{expert.nom}}</ion-title>
+    <ion-buttons slot="start" >
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list lines="none">
+    <ion-list-header>
+      Expert
+    </ion-list-header>
+    <ion-item>
+      <ion-avatar slot="start">
+        <img [src]="base64image(expert.photo)">
+      </ion-avatar>
+      <ion-label>
+        <h3>{{expert.nom}} {{expert.prenom}}</h3>
+        <p>{{expert.specialite}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+<ion-list>
+    <ion-list-header>
+      Sujets
+    </ion-list-header>
+    <ion-item *ngFor="let sujet of expert.sujets">
+      <ion-label (click)="afficherDetail(sujet.id)">
+        <h3>{{sujet.titre}}</h3>
+        <p>{{sujet.description}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

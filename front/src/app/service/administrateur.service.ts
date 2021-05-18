@@ -20,6 +20,14 @@ export class AdministrateurService {
     return this.http.get(`${this.baseUrl}`,{ headers: reqHeader });
   }
 
+  afficherAdministrateur(id: number): Observable<any> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+    return this.http.get(`${this.baseUrl}/${id}`,{ headers: reqHeader });
+  }
+
   modifierAdministrateur(admin:Object,id: number): Observable<any> {
     var reqHeader = new HttpHeaders({ 
       'Content-Type': 'application/json',

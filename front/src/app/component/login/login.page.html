@@ -8,18 +8,18 @@
 
   <ion-item>
     <ion-label position="stacked" color="primary" ><b>Email</b></ion-label>
-    <ion-input [(ngModel)]="utilisateur.email" name="email"></ion-input>
+    <ion-input id="email" [(ngModel)]="utilisateur.email" name="email"></ion-input>
   </ion-item>
 <br/><br/>
   <ion-item>
-    <ion-label  position="stacked"  color="primary"><b>Password</b></ion-label>
-    <ion-input type="password" [(ngModel)]="utilisateur.password" name="password"></ion-input>
+    <ion-label  position="stacked"  color="primary"><b>Mot de passe</b></ion-label>
+    <ion-input  id="password" type="password" [(ngModel)]="utilisateur.password" name="password"></ion-input>
   </ion-item>
 
 
 
 <br/><br/><br/>
-    <ion-button expand="block" (click)="login()">Connecter</ion-button>
+    <ion-button id="login" expand="block" (click)="login()">Connecter</ion-button>
 <a color="primary" (click)="goPageInscription()"><p>Créer un compte</p></a>
 </div>
 

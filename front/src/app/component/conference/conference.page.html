@@ -1,12 +1,12 @@
 <ion-toolbar color="primary">
 
   <ion-buttons slot="start">
-    <ion-back-button defaultHref="../"></ion-back-button>
+    <ion-back-button defaultHref="tabs/seance"></ion-back-button>
  </ion-buttons>
  
     <ion-title>Conférence</ion-title>
 
-  <ion-buttons slot="end"  (click)="ajouterConference()">
+  <ion-buttons slot="end"  (click)="payer()">
     <ion-icon name="checkmark" slot="icon-only"></ion-icon>
   </ion-buttons>
 </ion-toolbar>
@@ -51,7 +51,7 @@
     <br/>
   <ion-item>
     <ion-label  position="stacked"><b>Date</b></ion-label>
-    <ion-datetime  [(ngModel)]="date"></ion-datetime>
+    <ion-datetime  [(ngModel)]="date" (ionChange)="calculePeriode()" ></ion-datetime>
   </ion-item>
 
   <ion-row>
@@ -64,12 +64,27 @@
 <ion-col>
   <ion-item>
     <ion-label position="stacked">Heure Fin</ion-label>
-    <ion-datetime name="heureFin" display-format="h:mm A"  [(ngModel)]="heureFin"  picker-format="h:mm A" minuteValues="0,15,30,45"></ion-datetime>
+    <ion-datetime  name="heureFin" display-format="h:mm A"  [(ngModel)]="heureFin"  picker-format="h:mm A" minuteValues="0,15,30,45" ></ion-datetime>
   </ion-item>
 </ion-col>
 
 </ion-row>
 
+<ion-item lines="none">
+<ion-label ><b>Paiement</b></ion-label>
+</ion-item>
+<ion-item lines="none">
+  <ion-text color="dark">
+  <h6><b>Période de sponsoring: </b> {{duree}} jours</h6>
+  <h6><b>Prix de sponsoring: </b> {{duree/2}} €</h6>
+</ion-text>
+</ion-item>
+  <form  (ngSubmit)="createToken()" >
+    <ngx-stripe-card
+      [options]="cardOptions"
+      [elementsOptions]="elementsOptions"
+    ></ngx-stripe-card>
+  </form>
 
   </ion-list>
 

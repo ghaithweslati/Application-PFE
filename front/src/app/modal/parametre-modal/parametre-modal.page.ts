@@ -18,13 +18,19 @@ export class ParametreModalPage implements OnInit {
   deconnexion()
   {
       localStorage.clear();
-      this.router.navigate(['../login']);
+      window.location.href="http://localhost:8100/login";
       this.popCtrl.dismiss();
   }
 
   redirectPageCompte()
   {
       this.router.navigate(['../compte']);
+      this.popCtrl.dismiss();
+  }
+
+  redirectPageMotDePasse()
+  {
+      this.router.navigate(['../mdp']);
       this.popCtrl.dismiss();
   }
 

@@ -40,6 +40,15 @@ router.post(
 );
 
 
+router.put(
+  "/:id",
+  // isAuth
+  passport.authenticate("jwt", { session: false }),
+  periodeDisponibiliteController.updateDisponibilite
+);
+
+
+
 
 router.delete(
   "/:id",

@@ -2,9 +2,6 @@
   <ion-toolbar  color="primary">
     <ion-title>Domaine</ion-title>
     <ion-buttons slot="end" >
-      <ion-button *ngIf="role=='Administrateur'" (click)="ajouterDomainePage()">
-        <ion-icon name="add" slot="icon-only"></ion-icon>
-      </ion-button>
       <ion-button (click)="initParametres($event)">
         <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
       </ion-button>
@@ -14,12 +11,22 @@
 
 <ion-content>
 
+  <h2 *ngIf="role=='Demandeur'">Choisir le thème des sujets</h2>
   <ion-grid>
     <ion-row no-padding>
       <ion-col  *ngFor="let domaine of domaines" size-lg="6" size-md="6" size-sm="6" size="6">
-              <div (click)="actionDomaine(domaine)">{{domaine.nom}}</div>
+              <div (click)="actionDomaine(domaine)">
+                  <span>{{domaine.nom}}</span>
+              </div>
       </ion-col>
     </ion-row>
 </ion-grid>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed"   *ngIf="role=='Administrateur'">
+  <ion-fab-button (click)="ajouterDomainePage()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
 
 </ion-content>

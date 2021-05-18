@@ -171,14 +171,14 @@ export class SeanceDetailPage implements OnInit {
     return (this.seance.status!=StatusSeance.Cloture)/*&&((duree<=30&&duree>=-30)&&new Date()<=new Date(this.seance.periode_seance.dateFin))*/;
   }
 
-  sommeFrais()
+  fraisSeance(seance:any)
   {
 
-    var t1 = new Date(this.seance.periode_seance.dateFin);
-    var t2 = new Date(this.seance.periode_seance.dateDeb);
+    var t1 = new Date(seance.periode_seance.dateFin);
+    var t2 = new Date(seance.periode_seance.dateDeb);
     var dif = t1.getTime() - t2.getTime();
     var minute = dif / 1000 / 60 ;
-    var frais = this.seance.sujet.frais;
+    var frais = seance.sujet.frais;
     frais.sort((a,b) => a.duree < b.duree ? 1 : -1);
     var prix =0;
     var i = 0;

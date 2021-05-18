@@ -9,7 +9,6 @@ import { StatusSeance } from "../Enum/StatusSeance";
 
 export class Seance {
     id: number;
-    dureeEffectif: number;
     periode_seance: PeriodeSeance=new PeriodeSeance();
     sujet:Sujet= new Sujet();
     status:StatusSeance;

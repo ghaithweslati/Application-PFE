@@ -9,40 +9,21 @@
   </ion-header>
    
   <ion-content>
-    <ion-list>
-    <ion-list-header>
-      Gain Total
-    </ion-list-header>
 
-    <ion-item>
-      <ion-label>
-        <h3>Nombre de séance</h3>
-        <p>{{consultations.length}} Consultations,{{conferences.length}} Conferences</p>
-      </ion-label>
-    </ion-item>
 
-    <ion-item>
-      <ion-label>
-        <h3>Durée total</h3>
-        <p>{{convertDuree()}}</p>
-      </ion-label>
-    </ion-item>
+<div>
+      <h3>Total des gains</h3>
 
-    <ion-item>
-      <ion-label>
-        <h3>Gain total</h3>
-        <p>{{gainTotal}} DT</p>
-      </ion-label>
-    </ion-item>
+      <h1>{{gainTotal}} €</h1>
 
-    <ion-list-header>
-      Gain Détailé
-    </ion-list-header>
+      <h5><div id="nbSeance">{{consultations.length+conferences.length}} Séances</div> en {{convertDuree()}}</h5>
+    </div>
 
+      <ion-list lines="none"> 
     <ion-item *ngFor="let item of tabStatistique">
       <ion-label>
-      <h3>{{item[0]}}</h3>
-      <p>{{item[1]}} DT</p>
+      <span>{{item[0]}}</span>
+      <span>{{item[1]}} €</span>
       </ion-label>
     </ion-item>
 

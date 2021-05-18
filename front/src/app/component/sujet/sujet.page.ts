@@ -45,6 +45,9 @@ export class SujetPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: SujetModalPage,
       cssClass: 'sujet-modal',
+      componentProps: { 
+        listeSujets:this.allSujets,
+      },
       backdropDismiss: false
     });
    
@@ -129,7 +132,18 @@ export class SujetPage implements OnInit {
         id: id
       }
     };
-    this.router.navigate(['../sujet-detail/'],navigationExtras);
+    this.router.navigate(['sujet-detail'],navigationExtras);
+  }
+
+  expertDetail(id:number)
+  {
+
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        id: id
+      }
+    };
+    this.router.navigate(['expert'],navigationExtras);
   }
 
   onInput(val:string)

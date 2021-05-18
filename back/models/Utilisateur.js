@@ -10,7 +10,7 @@ class Utilisateur {
     };
     this.nom = { type: Sequelize.STRING, allowNull: false };
     this.prenom = { type: Sequelize.STRING, allowNull: false };
-    this.email = { type: Sequelize.STRING, allowNull: false };
+    this.email = { type: Sequelize.STRING, allowNull: false, unique: true };
     this.hash = { type: Sequelize.STRING, allowNull: false };
     this.salt = { type: Sequelize.STRING, allowNull: false };
     this.etat = { type: Sequelize.ENUM, values: ['Actif', 'Banni'] };

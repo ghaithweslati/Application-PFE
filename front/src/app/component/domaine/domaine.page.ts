@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { ActionSheetController, AlertController, PopoverController } from '@ionic/angular';
+import { ActionSheetController, AlertController, PopoverController, ToastController } from '@ionic/angular';
 import { ParametreModalPage } from 'src/app/modal/parametre-modal/parametre-modal.page';
 import { Domaine } from 'src/app/model/domaine';
 import { DomaineService } from 'src/app/service/domaine.service';
@@ -20,11 +20,13 @@ export class DomainePage implements OnInit {
     private alertController:AlertController,
     private popCtrl:PopoverController,
     private actionSheetController:ActionSheetController,
+    private toasterController:ToastController,
     private storageService:StorageService) { }
 
   domaines:Domaine[]=[];
 
   ngOnInit() {
+    this.role=this.storageService.afficherUtilisateurCourant().role
     this.afficherDomaine();
   }
 
@@ -72,8 +74,19 @@ export class DomainePage implements OnInit {
         }, {
           text: 'Confirmer',
           handler: (data) => {
+            if(data.nom==undefined||data.nom=="")
+            {
+              this.presentToast("Le champ de nom est obligatoire");
+            }            
+          else if(this.exite(data.nom))
+          {
+            this.presentToast("Il y a déjà un domaine avec ce nom");
+          }
+          else
+          {
             domaine.nom=data.nom;
             this.modifierDomaine(domaine);
+          }
           }
         }
       ]
@@ -107,7 +120,12 @@ export class DomainePage implements OnInit {
           text: 'Confirmer',
           handler: (alertData) => {
             this.domaine.nom=alertData.nom;
-            this.ajouterDomaine();
+            if(this.domaine.nom==undefined||this.domaine.nom=="")
+              this.presentToast("Le champ de nom est obligatoire");
+            else if(this.exite(this.domaine.nom))
+              this.presentToast("Il y a déjà un domaine avec ce nom")
+            else
+             this.ajouterDomaine();
           }
         }
       ]
@@ -123,6 +141,7 @@ export class DomainePage implements OnInit {
     this.domaineService.ajouterDomaine(this.domaine).subscribe((res:any)=>
     {
       this.afficherDomaine();
+      this.presentToast("Ajout du domaine réussi");
     })
   }
 
@@ -130,6 +149,7 @@ export class DomainePage implements OnInit {
   {
     this.domaineService.modifierDomaine(domaine,domaine.id).subscribe((res:any)=>
     {
+      this.presentToast("Modification du domaine réussi");
       this.afficherDomaine();
     })
   }
@@ -138,14 +158,14 @@ export class DomainePage implements OnInit {
   {
     this.domaineService.supprimerDomaine(id).subscribe((res:any)=>
     {
+      this.presentToast("Suppression du domaine réussi");
       this.afficherDomaine();
     })
   }
 
   afficherDomaine()
   {
-    this.role=this.storageService.afficherUtilisateurCourant().role
-    this.domaineService.afficherDomaines().subscribe((res:any)=>
+     this.domaineService.afficherDomaines().subscribe((res:any)=>
     { 
       this.domaines=res.data.rows;
     });
@@ -222,5 +242,31 @@ export class DomainePage implements OnInit {
   
         return await popover.present();
     }
+  
+
+    exite(nom:String)
+    {
+      var existe=false;
+      let i=0;
+      while(i<this.domaines.length && existe==false)
+      {
+        if(this.domaines[i].nom.toLowerCase()==nom.toLowerCase())
+          existe=true;
+        else
+          i++;
+      }
+      return existe;
+    }
+
+
+    async presentToast(message) {
+      const toast = await this.toasterController.create({
+        message: message,
+        duration: 2000,
+        color:'dark'
+      });
+      toast.present();
+    }
+   
   
 }

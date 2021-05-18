@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
+import { EtatUtilisateur } from 'src/app/Enum/EtatUtilisateur';
 import { Utilisateur } from '../../model/utilisateur';
 import { AuthentificationService } from '../../service/authentification.service';
 import { StorageService } from '../../service/storage.service';
@@ -14,9 +15,12 @@ export class LoginPage implements OnInit {
 
   utilisateur:Utilisateur =new Utilisateur();
   eventSource = [];
-
-  constructor(private authService: AuthentificationService,private storageService:StorageService,
-    private router: Router,public toastController: ToastController) {}
+  nom='test';
+  constructor(private authService: AuthentificationService,
+    private storageService:StorageService,
+    private router: Router,
+    private loadingController:LoadingController,
+    public toastController: ToastController) {}
 
     
     async presentToast(message) {
@@ -24,7 +28,6 @@ export class LoginPage implements OnInit {
         message: message,
         duration: 2000,
         color:'dark'
-
       });
       toast.present();
     }
@@ -33,35 +36,51 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  login()
+async login()
   {
+
+    const loading = await this.loadingController.create({
+      message: 'Chargement...',
+      translucent: true,
+      backdropDismiss:true,
+    });
+    await loading.present();
+
     this.authService.login(this.utilisateur).subscribe((res:any) =>
       {
-        //localStorage.setItem('token',res.token+"");
-      //  this.storage.set('token', res.token+"");
-        //this.presentToast("Authentification réussit");*/
+        loading.dismiss();
         var user =res.user;
-        user.role=res.type;
-        var direction="/";
-        if (user.role=="Administrateur") {
-          direction+="/domaine"
+        if(user.etat==EtatUtilisateur.Banni)
+          this.presentToast("Votre compte est banni");
+        else
+        {
+          user.role=res.type;
+          var direction="/";
+          if (user.role=="Administrateur") {
+            direction+="/domaine"
+          }
+          localStorage.setItem('token',res.token);
+          this.storageService.setUtilisateurCourant(res.user);
+          this.router.navigate(['./tabs'+direction],);
+          this.presentToast("Authentification réussi");
         }
-        localStorage.setItem('token',res.token);
-        this.storageService.setUtilisateurCourant(res.user);
-        this.router.navigate(['./tabs'+direction],);
       },
       error=>
       {
         this.presentToast(error.error.msg);
+        loading.dismiss();
       }
       )
 
   }
+
 
   goPageInscription()
   {
 
     this.router.navigate(['../inscription/']);
   }
+
+
 
 }

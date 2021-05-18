@@ -3,3 +3,4 @@ const factory = require("./handlerFactory");
 
 exports.getAllAdministrateur = factory.getAll(Administrateur);
 exports.updateAdminstrateur = factory.updateOne(Administrateur);
+exports.getOneAdminstrateur = factory.getOne(Administrateur);

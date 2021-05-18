@@ -1,10 +1,12 @@
+
+import { DisponibilitePage } from './disponibilite.page';
+
+import { DisponibilitePageRoutingModule } from './disponibilite-routing.module';
+
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DisponibilitePage } from './disponibilite.page';
-
-import { DisponibilitePageRoutingModule } from './disponibilite-routing.module';
 
 import { NgModule, LOCALE_ID } from '@angular/core';
 

@@ -12,6 +12,8 @@ import { StorageService } from 'src/app/service/storage.service';
 import { Location } from '@angular/common'
 import { DemandeurService } from 'src/app/service/demandeur.service';
 import { ExpertService } from 'src/app/service/expert.service';
+import { Compte } from 'src/app/model/compte';
+import { ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -30,6 +32,7 @@ export class ComptePage implements OnInit {
     private adminService:AdministrateurService,
     private demandeurService:DemandeurService,
     private expertService:ExpertService,
+    private toastController:ToastController,
     private location:Location) { }
 
   ngOnInit() {
@@ -40,6 +43,9 @@ export class ComptePage implements OnInit {
     {
       this.utilisateur.domaine=new Domaine();
       this.utilisateur.domaine.id=JSON.parse(localStorage.getItem('user')).domaineId;
+      this.utilisateur.compte=new Compte();
+      this.utilisateur.compte.code=JSON.parse(localStorage.getItem('user')).compteId;
+
     }
   }
 
@@ -88,6 +94,7 @@ export class ComptePage implements OnInit {
       {
         this.adminService.modifierAdministrateur(this.utilisateur,this.utilisateur.id).subscribe(res=>
           {
+            this.presentToast("Modification des information réussi");
             var utilisateurConnecte=JSON.parse(localStorage.getItem('user'));
             utilisateurConnecte.nom=this.utilisateur.nom;
             utilisateurConnecte.prenom=this.utilisateur.prenom;
@@ -101,6 +108,7 @@ export class ComptePage implements OnInit {
       {
         this.demandeurService.modifierDemandeur(this.utilisateur,this.utilisateur.id).subscribe(res=>
           {
+            this.presentToast("Modification des information réussi");
             var utilisateurConnecte=JSON.parse(localStorage.getItem('user'));
             utilisateurConnecte.nom=this.utilisateur.nom;
             utilisateurConnecte.prenom=this.utilisateur.prenom;
@@ -113,9 +121,10 @@ export class ComptePage implements OnInit {
       }
       else
       {
-        var user=Object.assign(this.utilisateur,{'domaineId':this.utilisateur.domaine.id});
+        var user=Object.assign(this.utilisateur,{'compteId':this.utilisateur.compte.code},{'domaineId':this.utilisateur.domaine.id});
         this.expertService.modifierExpert(user,user.id).subscribe(res=>
           {
+            this.presentToast("Modification des information réussi");
             var utilisateurConnecte=JSON.parse(localStorage.getItem('user'));
             utilisateurConnecte.nom=this.utilisateur.nom;
             utilisateurConnecte.prenom=this.utilisateur.prenom;
@@ -127,4 +136,15 @@ export class ComptePage implements OnInit {
           })
       }
   }
+
+  async presentToast(message) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color:'dark'
+    });
+    toast.present();
+  }
+ 
+
 }

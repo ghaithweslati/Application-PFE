@@ -20,12 +20,20 @@ export class ExpertService {
     return this.http.get(`${this.baseUrl}`,{ headers: reqHeader });
   }
 
+  afficherExpert(id): Observable<any> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+    return this.http.get(`${this.baseUrl}/Detail/${id}`,{ headers: reqHeader });
+  }
+
   afficherExpertsParDomaine(domaine): Observable<any> {
     var reqHeader = new HttpHeaders({ 
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('token'),
     });
-    return this.http.get(`${this.baseUrl}/${domaine}`,{ headers: reqHeader });
+    return this.http.get(`${this.baseUrl}/Sujet/${domaine}`,{ headers: reqHeader });
   }
 
   modifierExpert(expert:Object,id: number): Observable<any> {

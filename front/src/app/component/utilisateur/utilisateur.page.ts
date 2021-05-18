@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AlertController, PopoverController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
+import { AlertController, PopoverController, ToastController } from '@ionic/angular';
 import { EtatUtilisateur } from 'src/app/Enum/EtatUtilisateur';
 import { ParametreModalPage } from 'src/app/modal/parametre-modal/parametre-modal.page';
 import { Utilisateur } from 'src/app/model/utilisateur';
@@ -24,6 +25,8 @@ export class UtilisateurPage implements OnInit {
     private administrateurService:AdministrateurService,
     private alertController:AlertController,
     private popCtrl:PopoverController,
+    private toastController:ToastController,
+    private router:Router,
     private _sanitizer: DomSanitizer) {}
 
 
@@ -63,6 +66,10 @@ export class UtilisateurPage implements OnInit {
   {
     this.expertService.modifierExpert(utilisateur,id).subscribe(res=>
       {
+        if(utilisateur.etat==EtatUtilisateur.Banni)
+        this.presentToast(utilisateur.prenom+" "+utilisateur.nom+" est banni !")
+      else
+        this.presentToast(utilisateur.prenom+" "+utilisateur.nom+" n'est plus banni !")
           this.afficherLesExperts();
       });
   }
@@ -72,6 +79,10 @@ export class UtilisateurPage implements OnInit {
   {
     this.demandeurService.modifierDemandeur(utilisateur,id).subscribe(res=>
       {
+        if(utilisateur.etat==EtatUtilisateur.Banni)
+        this.presentToast(utilisateur.prenom+" "+utilisateur.nom+" est banni !")
+      else
+        this.presentToast(utilisateur.prenom+" "+utilisateur.nom+" n'est plus banni !")
           this.afficherLesDemandeurs();
       });
   }
@@ -197,6 +208,32 @@ export class UtilisateurPage implements OnInit {
 
       return await popover.present();
   }
+
+
+  
+  async presentToast(message) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color:'dark'
+    });
+    toast.present();
+  }
+ 
+
+  
+  afficherDetail(id:number)
+  {
+    if(this.role=="expert")
+    {
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        id: id
+      }
+    };
+    this.router.navigate(['../expert/'],navigationExtras);
+  }
+}
 
 
 }

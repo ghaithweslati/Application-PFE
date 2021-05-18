@@ -8,6 +8,7 @@ import { NgZone } from '@angular/core';
 import{SujetModalPage} from 'src/app/modal/sujet-modal/sujet-modal.page'
 import { DomSanitizer } from '@angular/platform-browser';
 import {Location} from '@angular/common';
+import { EtatUtilisateur } from 'src/app/Enum/EtatUtilisateur';
 
 
 
@@ -69,9 +70,11 @@ export class SujetDetailPage implements OnInit {
     await alert.present();
   }
 
-  plannifierSeance()
+  reserverConsultation()
   {
 
+    if(this.sujet.expert.etat!=EtatUtilisateur.Banni)
+    {
       let navigationExtras: NavigationExtras = {
         queryParams: {
           id: this.sujet.id,
@@ -79,6 +82,11 @@ export class SujetDetailPage implements OnInit {
         }
       };
       this.router.navigate(['../tabs/disponibilite'],navigationExtras);
+    }
+    else
+    {
+        this.presentToast("Réservation du consultation échoué!\nL'expert de ce sujet est banni")
+    }
   }
 
   initSujet()
@@ -138,7 +146,7 @@ this.location.back();
   async presentToast(message) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: 3000,
       color:'dark'
     });
     toast.present();

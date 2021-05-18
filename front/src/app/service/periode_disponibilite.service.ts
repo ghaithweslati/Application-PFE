@@ -42,4 +42,12 @@ export class PeriodeDisponibiliteService {
       return this.http.get(`${this.baseUrl}`,{ headers: reqHeader });
   }
 
+  modifierDisponibilite(disponibilite:Object,id: number): Observable<any> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token'),
+    });
+    return this.http.put(`${this.baseUrl}/${id}`,disponibilite, { headers: reqHeader });
+  }
+
 }

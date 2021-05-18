@@ -42,6 +42,7 @@ exports.signup = (req, res, next) => {
       email: req.body.email,
       photo: req.body.photo,
       domaineId: req.body.domaineId,
+      compteId: req.body.compteId,
       specialite: req.body.specialite,
       etat: req.body.etat,
       hash: hash,
@@ -59,6 +60,7 @@ exports.signup = (req, res, next) => {
         user: user,
         token: tokenObject.token,
         expiresIn: tokenObject.expires,
+        msg: "Authentification réussi"
       });
     });
   } catch (err) {
@@ -98,7 +100,7 @@ exports.login = (req, res, next) => {
                     } else {
                       res
                         .status(401)
-                        .json({ success: false, msg: "you entered the wrong password" });
+                        .json({ success: false, msg: "Mot de passe incorrecte" });
                     }
 
                   }
@@ -125,11 +127,13 @@ exports.login = (req, res, next) => {
                   type: "Demandeur",
                   token: tokenObject.token,
                   expiresIn: tokenObject.expires,
+                  msg: "Authentification réussi"
+
                 });
               } else {
                 res
                   .status(401)
-                  .json({ success: false, msg: "you entered the wrong password" });
+                  .json({ success: false, msg: "Mot de passe incorrecte" });
               }
 
             }
@@ -160,7 +164,7 @@ exports.login = (req, res, next) => {
         } else {
           res
             .status(401)
-            .json({ success: false, msg: "you entered the wrong password" });
+            .json({ success: false, msg: "Mot de passe incorrecte" });
         }
 
       }

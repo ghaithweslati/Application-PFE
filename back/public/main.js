@@ -93,11 +93,52 @@ const connectToNewUser = (userId, stream) => {
     })
     call.on('close', () => {
 
-        if (video && video.nextSibling) {
-            video.parentNode.parentNode.removeChild(video.parentNode.nextSibling)
+        /*   if (video && video.nextSibling) {
+               video.parentNode.parentNode.removeChild(video.parentNode.nextSibling)
+           }*/
+
+        var previous = video.parentElement.previousSibling;
+
+        // iterate until we find an element node or there is no previous sibling
+        while (previous && previous.nodeType !== 1) {
+            previous = previous.previousSibling;
         }
 
-        video.parentNode.innerHTML = "";
+        // if there is a sibling, remove it
+        if (previous) {
+            previous.parentNode.removeChild(previous);
+        }
+
+        video.parentElement.remove();
+
+        var n = videoGrid.childNodes.length / 2;
+        var elements = document.getElementsByClassName("MyClass");
+        if (n == 1) {
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.width = "100%";
+                elements[i].style.height = "100%";
+            }
+        }
+        else if (n == 2) {
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.width = "100%";
+                elements[i].style.height = "50%";
+            }
+        }
+        else if (n == 3 || n == 4) {
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.width = "50%";
+                elements[i].style.height = "50%";
+            }
+        }
+        else if (n == 5 || n == 6) {
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.width = "50%";
+                elements[i].style.height = "33%";
+            }
+        }
+
+
 
 
 

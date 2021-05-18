@@ -7,6 +7,13 @@ const passport = require("passport");
 
 const router = express.Router();
 
+router.get(
+  "/Detail/:id",
+  // isAuth,
+  //passport.authenticate("jwt", { session: false }),
+  expertController.getExpert
+);
+
 // GET /utilisateur/utilisateurs/:page
 router.get(
   "/",
@@ -16,7 +23,7 @@ router.get(
 );
 
 router.get(
-  "/:domaineId",
+  "/Sujet/:domaineId",
   // isAuth,
   //passport.authenticate("jwt", { session: false }),
   expertController.getAllExpert
