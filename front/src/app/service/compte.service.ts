@@ -15,7 +15,14 @@ export class CompteService {
 
   }
 
-  getCompte(compte: Object): Observable<Object> {
+  ajouterCompte(object: Object): Observable<Object> {
+    var reqHeader = new HttpHeaders({ 
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(`${this.baseUrl}/`, object, { headers: reqHeader });
+  }
+
+/*  getCompte(compte: Object): Observable<Object> {
     var reqHeader = new HttpHeaders({ 
       'Content-Type': 'application/json'
     });
@@ -28,6 +35,6 @@ export class CompteService {
       'Authorization': localStorage.getItem('token'),
     });
     return this.http.put(`${this.baseUrl}/${id}`,compte, { headers: reqHeader });
-  }
+  }*/
 
 }

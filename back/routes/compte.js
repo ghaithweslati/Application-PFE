@@ -7,12 +7,7 @@ const compteController = require("../controllers/compte");
 const router = express.Router();
 
 
-router.post("/", compteController.getCompte);
+router.post("/", compteController.createCompte);
 
-router.put(
-    "/:id",
-    // isAuth
-    compteController.updateCompte
-);
 
 module.exports = router;

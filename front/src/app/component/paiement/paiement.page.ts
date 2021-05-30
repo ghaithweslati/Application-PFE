@@ -3,11 +3,13 @@ import { ActivatedRoute, Router, NavigationExtras } from "@angular/router";
 import { LoadingController, ToastController } from "@ionic/angular";
 import { StatusSeance } from "src/app/Enum/StatusSeance";
 import { Consultation } from "src/app/model/consultation";
+import { Notification } from "src/app/model/notification";
 import { Sujet } from "src/app/model/sujet";
 import { CompteService } from "src/app/service/compte.service";
 import { ConsultationService } from "src/app/service/consultation.service";
 import { PeriodeSeanceService } from "src/app/service/periode_seance.service";
 import { SujetService } from "src/app/service/sujet.service";
+
 
 import { StripeService, StripeCardComponent } from 'ngx-stripe';
 import {
@@ -16,6 +18,7 @@ import {
 } from '@stripe/stripe-js';
 import { PaiementService } from "src/app/service/paiement.service";
 import { AdministrateurService } from "src/app/service/administrateur.service";
+import { NotificationService } from "src/app/service/notification.service";
 
 
 
@@ -40,7 +43,7 @@ export class PaiementPage implements OnInit {
   sujet:Sujet=new Sujet();
   consultation:Consultation=new Consultation();
   hourValues = ['06','07','08','09','10','11','12','13','14','15','16','17','18','19'];
-
+  notification:Notification=new Notification();
 
   
   cardOptions: StripeCardElementOptions = {
@@ -73,6 +76,7 @@ export class PaiementPage implements OnInit {
     private compteService:CompteService,
     private sujetService:SujetService,
     private paiementService:PaiementService,
+    private notificationService:NotificationService,
     ) { }
 
   ngOnInit() {
@@ -229,6 +233,10 @@ async reserverConsultation()
           const consultation = {"status":StatusSeance.NonCommence,"sujetId":params.id,"periodeSeanceId":res.data.id} 
           this.consultationService.ajouterConsultation(consultation).subscribe((res:any)=>
           {
+            this.notification.texte="a réservé une consultation";
+            const notif = Object.assign( {}, this.notification, {'consultationId':res.data.id} );
+            this.notificationService.ajouterNotification(notif).subscribe();
+
             loading.dismiss();
             this.presentToast("Réservation du consultation réussi");
             

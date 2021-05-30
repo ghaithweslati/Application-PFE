@@ -2,7 +2,7 @@
 
 export class Compte {
     id: number;
-      code: number;
+      code: string;
       cle:string;
 
 

@@ -18,6 +18,5 @@ module.exports = {
   experts: "experts",
   demandeurs: "demandeurs",
   administrateurs: "administrateurs",
-
-
+  notifications: "notifications",
 };

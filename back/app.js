@@ -32,6 +32,11 @@ const Domaine = require("./models/Domaine");
 const Conference = require("./models/Conference");
 const Consultation = require("./models/Consultation");
 const Participation = require("./models/Participation");
+const Notification = require("./models/Notification");
+
+
+//const Notification = require("./models/Notification");
+
 
 
 
@@ -104,6 +109,8 @@ const conferenceRoutes = require("./routes/conference");
 const participationRoutes = require("./routes/participation");
 const compteRoutes = require("./routes/compte");
 const paiementRoutes = require("./routes/paiement");
+const notificationRoutes = require("./routes/notification");
+
 
 
 
@@ -186,6 +193,8 @@ app.use("/conference", conferenceRoutes);
 app.use("/participation", participationRoutes);
 app.use("/compte", compteRoutes);
 app.use("/paiement", paiementRoutes);
+app.use("/notification", notificationRoutes);
+
 
 
 
@@ -265,6 +274,13 @@ Compte.hasOne(Administrateur);
 
 Demandeur.belongsToMany(Conference, { through: Participation })
 Conference.belongsToMany(Demandeur, { through: Participation })
+
+Notification.belongsTo(Consultation);
+Consultation.hasMany(Notification);
+
+Notification.belongsTo(Conference);
+Conference.hasMany(Notification);
+
 
 
 

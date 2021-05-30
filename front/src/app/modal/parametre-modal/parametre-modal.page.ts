@@ -18,7 +18,7 @@ export class ParametreModalPage implements OnInit {
   deconnexion()
   {
       localStorage.clear();
-      window.location.href="http://localhost:8100/login";
+      window.location.href="../login";
       this.popCtrl.dismiss();
   }
 

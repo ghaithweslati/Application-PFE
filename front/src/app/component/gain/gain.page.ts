@@ -1,4 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { PopoverController } from "@ionic/angular";
+import { ParametreModalPage } from "src/app/modal/parametre-modal/parametre-modal.page";
 import { Conference } from "src/app/model/conference";
 import { Consultation } from "src/app/model/consultation";
 import { Seance } from "src/app/model/seance";
@@ -22,6 +24,7 @@ export class GainPage implements OnInit{
   gainTotal=0;
   constructor(private consultationService:ConsultationService,
     private conferenceService:ConferenceService,
+    private popCtrl:PopoverController,
     ) {}
 
   public ngOnInit(): void {
@@ -115,4 +118,18 @@ export class GainPage implements OnInit{
     return Object.entries(tab).sort((a:any,b:any) => b[0]-a[0])
   }
 
+
+  async initParametres(ev)
+  {
+      const popover = await this.popCtrl.create(
+        {
+          component:ParametreModalPage,
+          event:ev,
+  
+        }
+      )
+
+      return await popover.present();
+  }
+  
 }

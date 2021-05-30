@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { IonThumbnail, ModalController } from '@ionic/angular';
+import { IonThumbnail, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { StatusSeance } from 'src/app/Enum/StatusSeance';
 import { Conference } from 'src/app/model/conference';
 import { Consultation } from 'src/app/model/consultation';
@@ -13,6 +13,18 @@ import { ParticipationService } from 'src/app/service/participation.service';
 import { StorageService } from 'src/app/service/storage.service';
 import { SeanceModalPage } from 'src/app/modal/seance-modal/seance-modal.page';
 import { TypeConference } from 'src/app/Enum/TypeConference';
+import { Notification } from 'src/app/model/notification';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
+
+import { StripeService, StripeCardComponent } from 'ngx-stripe';
+import {
+  StripeCardElementOptions,
+  StripeElementsOptions
+} from '@stripe/stripe-js';
+import { PaiementService } from 'src/app/service/paiement.service';
+import { Demandeur } from 'src/app/model/demandeur';
+import { NotificationService } from 'src/app/service/notification.service';
 
 @Component({
   selector: 'app-seance-detail',
@@ -20,12 +32,30 @@ import { TypeConference } from 'src/app/Enum/TypeConference';
   styleUrls: ['./seance-detail.page.scss'],
 })
 export class SeanceDetailPage implements OnInit {
+  @ViewChild(StripeCardComponent) card: StripeCardComponent;
+
 
   consultation:Consultation=new Consultation();
   conference:Conference=new Conference();
   seance:Seance=new Seance();
   type="";
   utilisateurConnecte;
+  action="Participer";
+  notification:Notification=new Notification();
+  cardOptions: StripeCardElementOptions = {
+    style: {
+      base: {
+        iconColor: '#666EE8',
+        color: '#31325F',
+        fontWeight: 300,
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSize: '17px',
+        '::placeholder': {
+          color: '#6E6E6E'
+        }
+      }
+    }
+  };
   constructor(private consultationService:ConsultationService,
     private conferenceService:ConferenceService,
     private participationService:ParticipationService,
@@ -33,8 +63,12 @@ export class SeanceDetailPage implements OnInit {
     private router:Router,
     private modalCtrl:ModalController,
     private storageService:StorageService,
+    private toastController:ToastController,
+    private stripeService: StripeService,
+    private paiementService:PaiementService,
+    private loadingController:LoadingController,
+    private notificationService:NotificationService,
     private _sanitizer: DomSanitizer,
-    
     ) { }
 
     
@@ -124,20 +158,21 @@ export class SeanceDetailPage implements OnInit {
 
   goRoom()
   {
-    if(this.type=="Consultation")
+   if(this.type=="Consultation")
     {
       this.consultation.status=StatusSeance.EnCours;
       this.consultationService.modifierConsultation(this.consultation,this.seance.id).subscribe();
+   
+
     }
     else
       {
         this.conference.status=StatusSeance.EnCours;
         this.conferenceService.modifierConference(this.conference,this.seance.id).subscribe();
+      /*  const notif = Object.assign( {}, this.notification, {'conferenceId':this.conference.id} );
+        this.notificationService.ajouterNotification(notif).subscribe();*/
 
-        if(this.utilisateurConnecte.role=="Demandeur")
-        {
-          this.participationService.ajouterParticipation({"demandeurId":this.utilisateurConnecte.id,"conferenceId":this.seance.id}).subscribe();
-        }
+ 
       }
     var t1 = new Date(this.seance.periode_seance.dateFin);
     var t2 = new Date(this.seance.periode_seance.dateDeb);
@@ -159,16 +194,29 @@ export class SeanceDetailPage implements OnInit {
   }
 
 
-  verifierDate()
+  verifierParticipation()
   {
-    return true;
-   /*
-    var t2 = new Date();
-    var t1 = new Date(this.seance.periode_seance.dateDeb);
-    var dif = t1.getTime() - t2.getTime();
-    var duree = dif / 1000 /60 ;*/
-
-    return (this.seance.status!=StatusSeance.Cloture)/*&&((duree<=30&&duree>=-30)&&new Date()<=new Date(this.seance.periode_seance.dateFin))*/;
+  var participe=false;
+  var i=0;
+  if(this.conference.id!=null)
+  {
+    if(this.utilisateurConnecte.role=="Expert")
+    {
+      participe=true;     
+    }
+    else
+    {
+    while(i<this.conference.demandeurs.length&&this.conference.demandeurs[i].id!=this.utilisateurConnecte.id)
+      i++;
+    if(i<this.conference.demandeurs.length)
+      participe=true;
+    }
+  }
+  else
+  {
+    participe=true;
+  }
+  return participe;
   }
 
   fraisSeance(seance:any)
@@ -199,7 +247,73 @@ export class SeanceDetailPage implements OnInit {
   }
 
 
+  participer()
+  {
+    if(this.action=="Participer")
+    {
+      this.action="Payer";
+    }
+    else
+    {
+      this.payer();
+    }
+  }
+
   
+   
+async payer() {
+  const loading = await this.loadingController.create({
+    message: 'Paiement en cours..',
+    translucent: true,
+  });
+  await loading.present();
+  const utilisateurConnecte=JSON.parse(localStorage.getItem('user'));
+  const name =utilisateurConnecte.prenom+" "+utilisateurConnecte.nom;
+  this.stripeService
+    .createToken(this.card.element, { name })
+    .subscribe((result) => {
+      if (result.token) {
+          const transaction={ 
+            token : result.token.id,
+            solde:this.fraisSeance(this.conference),
+            exp:this.conference.sujet.expert.compte.cle
+          }
+          this.paiementService.payer(transaction).subscribe(res=>
+            {
+               // this.reserverConsultation();
+
+              this.participationService.ajouterParticipation({"demandeurId":this.utilisateurConnecte.id,"conferenceId":this.conference.id}).subscribe((res:any)=>
+              {
+                loading.dismiss();
+                this.presentToast("Participation réussi");
+                this.action="";
+                this.notification.texte="a participé à votre conférence";
+                const notif = Object.assign( {}, this.notification, {'conferenceId':this.conference.id} );
+                this.notificationService.ajouterNotification(notif).subscribe();
+    
+                this.afficherConference();
+                });
+            })
+          
+        console.log(result.token.id);
+      } else if (result.error) {
+        // Error creating the token
+          this.presentToast("Données du compte invalides !")
+      }
+    });
+}
+
+
+async presentToast(message) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 4000,
+    color:'dark'
+  });
+  toast.present();
+}
+
+
   async openSeanceModal() {
     const modal = await this.modalCtrl.create({
       component: SeanceModalPage,

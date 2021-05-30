@@ -113,8 +113,15 @@
       </ion-item>
     </ng-container>
 
+    <form  (ngSubmit)="payer()" *ngIf="action=='Payer'" >
+      <ngx-stripe-card
+        [options]="cardOptions"
+        [elementsOptions]="elementsOptions"
+      ></ngx-stripe-card>
+    </form>
+      <ion-button *ngIf="!verifierParticipation()" expand="block" (click)="participer()">{{action}}</ion-button>
 
-      <ion-button *ngIf="verifierDate()" expand="block" (click)="goRoom()">Rejoindre la salle de réunion virtuelle</ion-button>
+      <ion-button *ngIf="verifierParticipation()" expand="block" (click)="goRoom()">Rejoindre la salle de réunion virtuelle</ion-button>
   
 
   </ion-list>

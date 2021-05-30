@@ -34,16 +34,6 @@ router.get(
 
 router.post(
   "/",
-  // isAuth,
-  /*  [
-      body("firstName").trim().not().isEmpty(),
-      body("lastName").trim().not().isEmpty(),
-      body("email")
-        .isEmail()
-        .withMessage("Please enter a valid email.")
-        .normalizeEmail(),
-      body("phoneNumber").trim().isLength({ min: 8 }),
-    ],*/
   passport.authenticate("jwt", { session: false }),
   conferenceController.createConference
 );

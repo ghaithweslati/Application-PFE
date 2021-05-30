@@ -11,9 +11,10 @@ const Sujet = require("../models/Sujet");
 const Frais = require("../models/Frais");
 const Participation = require("../models/Participation");
 const Consultation = require("../models/Consultation");
+const Conference = require("../models/Conference");
 const Domaine = require("../models/Domaine");
 const Compte = require("../models/Compte");
-const { consultations } = require("../constant/models_names");
+const { consultations, conferences } = require("../constant/models_names");
 const { use } = require("passport");
 const { hash } = require("bcryptjs");
 const Op = Sequelize.Op;
@@ -366,7 +367,13 @@ const GetOneSpec = async (Model, req) => {
             include: [
               {
                 model: Expert,
-                attributes: ["id", "nom", "prenom", "photo"]
+                attributes: ["id", "nom", "prenom", "photo"],
+                include: [
+                  {
+                    model: Compte,
+                    attributes: ["id", "cle"],
+                  }
+                ]
               },
               {
                 model: Frais,
@@ -829,6 +836,55 @@ const GetAllSpec = async (Model, limit, offset, req) => {
               id: utilisateurId,
             },
             attributes: [],
+          },
+        ],
+      });
+      break;
+    case models_names.notifications:
+      query = Model.findAndCountAll({
+
+        include: [
+          {
+            model: Consultation,
+            attributes: ["id"],
+            include: [
+              {
+                model: Sujet,
+                attributes: ["titre"],
+                include:
+                  [
+                    {
+                      model: Expert,
+                      attributes: ["id", "nom", "prenom", "photo"],
+                    }
+                  ]
+              },
+              {
+                model: Demandeur,
+                attributes: ["id", "nom", "prenom", "photo"],
+              }
+            ]
+          },
+          {
+            model: Conference,
+            attributes: ["id"],
+            include: [
+              {
+                model: Sujet,
+                attributes: ["titre"],
+                include:
+                  [
+                    {
+                      model: Expert,
+                      attributes: ["id", "nom", "prenom", "photo"],
+                    }
+                  ]
+              },
+              {
+                model: Demandeur,
+                attributes: ["id", "nom", "prenom", "photo"],
+              }
+            ]
           },
         ],
       });

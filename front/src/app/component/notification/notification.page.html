@@ -1,0 +1,31 @@
+
+
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>
+        Notification
+      </ion-title>
+      <ion-buttons slot="end" >
+        <ion-button (click)="initParametres($event)">
+          <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+   
+  <ion-content>
+    <ion-list >
+      <ion-item *ngFor="let notif of mesNotifs" (click)="goSeance(notif)">
+        <ion-avatar slot="start">
+          <img [src]="base64image(notif.photo)">
+        </ion-avatar>
+        <ion-label text-wrap>
+          <h3><b>{{notif.user}}</b>{{notif.texte}}  «{{notif.sujet}}»</h3>
+          <p>{{notif.date}}</p>
+        </ion-label>
+   </ion-item>
+    </ion-list>
+    
+  </ion-content>
+
+

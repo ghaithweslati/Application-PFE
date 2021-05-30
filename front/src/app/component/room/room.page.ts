@@ -4,6 +4,7 @@ import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/
 import { DomSanitizer, SafeHtml, SafeStyle, SafeScript, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Platform } from '@ionic/angular';
+import { NotificationService } from 'src/app/service/notification.service';
 
 
 
@@ -24,7 +25,13 @@ export class RoomPage implements OnInit {
 };
 
 vidUrl:SafeResourceUrl;
-  constructor(private platform: Platform, private androidPermissions: AndroidPermissions,private domSantizer:DomSanitizer,private iab: InAppBrowser,private route:ActivatedRoute) {
+  constructor(private platform: Platform,
+     private androidPermissions: AndroidPermissions,
+     private domSantizer:DomSanitizer,
+     private iab: InAppBrowser,
+     private route:ActivatedRoute,
+     private notificationService:NotificationService,
+     ) {
 
   
   }
@@ -47,6 +54,7 @@ vidUrl:SafeResourceUrl;
 
     this.route.queryParams.subscribe(params => {
       if (params) {
+    //    this.sendNotification(params.id);
      //this.vidUrl="https://ghaith-weslati.herokuapp.com/"+params.id
      console.log("https://ghaith-weslati.herokuapp.com/"+params.id+"?sujet="+params.sujet+"&id"+params.id+"&role="+params.role+"&nom="+params.nom)
       this.vidUrl=this.domSantizer.bypassSecurityTrustResourceUrl("https://ghaith-weslati.herokuapp.com/"+params.id+"?sujet="+params.sujet+"&id="+params.id+"&role="+params.role+"&nom="+params.nom)
@@ -63,5 +71,10 @@ vidUrl:SafeResourceUrl;
 
 
   }
+
+  /*sendNotification(id)
+  {
+      this.notificationService.sendNotification({'idUser':1,'idRoom':id});
+  }*/
 
 }

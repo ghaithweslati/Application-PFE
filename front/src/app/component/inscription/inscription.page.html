@@ -81,8 +81,8 @@
     </ion-item>
 
     <ion-item *ngIf="role=='Expert'">
-      <ion-label class="expert"><b>Compte: </b></ion-label>
-      <ion-input  [(ngModel)]="expert.compte.code" name="code" placeholder="Code du compte" type="number"></ion-input>
+      <ion-label class="expert"><b>Compte Stripe: </b></ion-label>
+      <ion-input  [(ngModel)]="compte.cle" name="cle" placeholder="Code du compte" type="text"></ion-input>
     </ion-item>
 
     

@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Observable, Subscriber } from 'rxjs';
 import { EtatUtilisateur } from 'src/app/Enum/EtatUtilisateur';
+import { Compte } from 'src/app/model/compte';
 import { Domaine } from 'src/app/model/domaine';
 import { Expert } from 'src/app/model/expert';
 import { Utilisateur } from 'src/app/model/utilisateur';
 import { AuthentificationService } from 'src/app/service/authentification.service';
+import { CompteService } from 'src/app/service/compte.service';
 import { DomaineService } from 'src/app/service/domaine.service';
 import { StorageService } from 'src/app/service/storage.service';
 
@@ -19,12 +21,14 @@ export class InscriptionPage implements OnInit {
 
   utilisateur:Utilisateur = new Utilisateur();
   expert:Expert=new Expert();
+  compte:Compte=new Compte();
   domaines:Domaine[]=[];
   role:String="Demandeur";
   myimage: Observable<any>;
   path="../../../assets/icon/uploader.jpg";
   constructor(private authService: AuthentificationService,
     private domaineService:DomaineService,
+    private compteService:CompteService,
     private storageService:StorageService,
     private toastController:ToastController,
     private loadingController:LoadingController,
@@ -41,31 +45,38 @@ export class InscriptionPage implements OnInit {
   async inscrire() {
 
     this.expert.etat=EtatUtilisateur.Actif;
-    var user=Object.assign(this.expert,{'role':this.role},{'domaineId':this.expert.domaine.id},{'compteId':this.expert.compte.code});
+    var user=Object.assign(this.expert,{'role':this.role},{'domaineId':this.expert.domaine.id},{'compteId':0});
 
     if(this.verif(user))
     {
+
       const loading = await this.loadingController.create({
         message: 'Inscription en cours...',
         translucent: true,
         backdropDismiss:true,
       });
       await loading.present();
-
-    this.authService.inscrire(user).subscribe((res:any) => {
-      loading.dismiss();
-      this.presentToast("Inscription réussi")
-      const nouveauUtilisateur=res.user;
-      nouveauUtilisateur.role=this.role;      
-      localStorage.setItem('token',res.token);
-      this.storageService.setUtilisateurCourant(nouveauUtilisateur);
-      this.router.navigate(['./tabs'],);
-    }, 
-    error =>
-    {
-        loading.dismiss()
-        this.presentToast('Email existant')
-    });
+      
+      this.compteService.ajouterCompte(this.compte).subscribe((res:any)=>
+      {
+        user.compteId=res.data.id;
+        this.authService.inscrire(user).subscribe((res:any) => {
+          loading.dismiss();
+          this.presentToast("Inscription réussi")
+          const nouveauUtilisateur=res.user;
+          nouveauUtilisateur.role=this.role;      
+          localStorage.setItem('token',res.token);
+          this.storageService.setUtilisateurCourant(nouveauUtilisateur);
+          this.router.navigate(['./tabs'],);
+        }, 
+        error =>
+        {
+            loading.dismiss()
+            this.presentToast('Email existant')
+        });
+    
+    
+      });
     }
   }
 
@@ -145,7 +156,7 @@ export class InscriptionPage implements OnInit {
         this.presentToast("Specialité invalide");
         return false; 
       }
-      if(utilisateur.compte.code==undefined)
+      if(this.compte.cle==undefined)
       {
         this.presentToast("Compte invalide");
         return false; 

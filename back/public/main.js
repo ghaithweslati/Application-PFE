@@ -296,7 +296,10 @@ const setPlayVideo = () => {
 const leave = () => {
     if (confirm("Voulez vous vraiment quitter ?")) {
         //   document.cookie = name + "=index%3d1; expires=whenever;path=/";
-        window.history.back();
+        top.history.back();
+        //window.parent.main.history.back()
+
+
     }
 }
 

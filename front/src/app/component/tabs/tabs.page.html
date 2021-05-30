@@ -1,4 +1,4 @@
-<ion-tabs>
+<ion-tabs (click)="afficher()">
 
   <ion-tab-bar slot="bottom">
 
@@ -26,6 +26,13 @@
       <ion-icon name="logo-euro"></ion-icon>
       <ion-label>Gain</ion-label>
     </ion-tab-button>
+
+    <ion-tab-button *ngIf="role!='Administrateur'" tab="notification" (click)="vuNotif()">
+      <ion-icon name="notifications"></ion-icon>
+      <ion-label>Notification</ion-label>
+      <ion-badge color="danger" *ngIf="verifBadge()">{{notifsNonVu.length}}</ion-badge>
+    </ion-tab-button>
+
 
     <ion-tab-button *ngIf="role=='Administrateur'" tab="utilisateur" >
       <ion-icon name="people"></ion-icon>

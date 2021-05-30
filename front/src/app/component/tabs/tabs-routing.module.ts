@@ -32,6 +32,10 @@ const routes: Routes = [
         loadChildren: () => import('../gain/gain.module').then(m => m.GainPageModule)
       },
       {
+        path: 'notification',
+        loadChildren: () => import('../notification/notification.module').then(m => m.NotificationPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/seance',
         pathMatch: 'full'
